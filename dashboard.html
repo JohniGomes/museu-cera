@@ -758,8 +758,11 @@ function renderTabela(registros) {
     por[v].valor += Number(r['Total']) || 0;
     por[v].qtd   += Number(r['Quantidade']) || 0;
     const p = r['Produto'] || '—';
-    por[v].produtos[p] = (por[v].produtos[p] || 0) + (Number(r['Total']) || 0);
+    if (!por[v].produtos[p]) por[v].produtos[p] = { valor: 0, qtd: 0, canais: {} };
+    por[v].produtos[p].valor += Number(r['Total']) || 0;
+    por[v].produtos[p].qtd   += Number(r['Quantidade']) || 0;
     const c = r['Canal'] || '—';
+    por[v].produtos[p].canais[c] = (por[v].produtos[p].canais[c] || 0) + 1;
     por[v].canais[c] = (por[v].canais[c] || 0) + 1;
   });
 
@@ -790,18 +793,39 @@ function renderTabela(registros) {
     `;
     tbody.appendChild(tr);
 
-    // Sub-linha com produtos
-    const prods = Object.entries(d.produtos).sort((a,b) => b[1]-a[1]);
+    // Sub-linha com produtos — todas as colunas
+    const prods = Object.entries(d.produtos).sort((a,b) => b[1].valor - a[1].valor);
     const subTr = document.createElement('tr');
     subTr.className = 'sub-row';
     subTr.id = `sub-${idx}`;
+
+    const linhas = prods.map(([p, pd]) => {
+      const tkt = pd.qtd > 0 ? pd.valor / pd.qtd : 0;
+      const canal = Object.entries(pd.canais).sort((a,b) => b[1]-a[1])[0]?.[0] || '—';
+      const cCls  = canal === 'Bilheteria' ? 'tag-bil' : canal === 'POS' ? 'tag-pos' : '';
+      return `
+        <tr>
+          <td style="padding-left:40px;color:var(--muted);font-size:13px">${p}</td>
+          <td style="color:var(--green);font-weight:500;font-size:13px">${fmt(pd.valor)}</td>
+          <td style="font-size:13px;color:var(--muted)">${fmtN(pd.qtd)}</td>
+          <td style="font-size:13px;color:var(--muted)">${fmt(tkt)}</td>
+          <td colspan="2"><span class="tag-canal ${cCls}" style="font-size:10px">${canal}</span></td>
+        </tr>`;
+    }).join('');
+
     subTr.innerHTML = `
-      <td colspan="6">
-        <table class="sub-table">
-          ${prods.map(([p, v]) => `<tr><td>${p}</td><td style="text-align:right;padding-right:20px;font-weight:500;color:var(--text)">${fmt(v)}</td></tr>`).join('')}
+      <td colspan="6" style="padding:0">
+        <table style="width:100%;border-collapse:collapse;background:var(--green-l)">
+          <tr style="border-bottom:1px solid var(--border)">
+            <th style="padding:6px 6px 6px 40px;font-size:10px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;text-align:left">Produto</th>
+            <th style="padding:6px;font-size:10px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;text-align:left">Vendas</th>
+            <th style="padding:6px;font-size:10px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;text-align:left">Qtd</th>
+            <th style="padding:6px;font-size:10px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;text-align:left">Ticket</th>
+            <th colspan="2" style="padding:6px;font-size:10px;font-weight:600;color:var(--muted2);text-transform:uppercase;letter-spacing:0.06em;text-align:left">Canal</th>
+          </tr>
+          ${linhas}
         </table>
-      </td>
-    `;
+      </td>`;
     tbody.appendChild(subTr);
   });
 }
