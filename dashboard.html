@@ -6,6 +6,7 @@
 <title>Dashboard — Museu de Cera RJ</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -551,6 +552,74 @@ function renderKPIs(atual, a1) {
 // ── GRÁFICOS ──
 function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
 
+// Registrar plugin globalmente
+Chart.register(ChartDataLabels);
+
+// Opções base barras verticais
+function optsBar(prefixo) {
+  return {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        anchor: 'end', align: 'end',
+        color: '#10403B', font: { family: 'Rajdhani', size: 11, weight: '600' },
+        formatter: v => prefixo === 'R$' ? fmt(v) : fmtN(v),
+        clip: false,
+      }
+    },
+    scales: {
+      x: { grid: { display: false }, ticks: { font: { family: 'Rajdhani', size: 11 }, color: '#4C5958' } },
+      y: { display: false, grace: '20%' }
+    },
+    layout: { padding: { top: 24 } }
+  };
+}
+
+// Opções barras horizontais
+function optsBarH() {
+  return {
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      datalabels: {
+        anchor: 'end', align: 'right',
+        color: '#10403B', font: { family: 'Rajdhani', size: 11, weight: '600' },
+        formatter: v => fmt(v),
+        clip: false,
+      }
+    },
+    scales: {
+      x: { display: false },
+      y: { grid: { display: false }, ticks: { font: { family: 'Rajdhani', size: 10 }, color: '#4C5958' } }
+    },
+    layout: { padding: { right: 80 } }
+  };
+}
+
+function optsDoughnut() {
+  return {
+    responsive: true, maintainAspectRatio: false, cutout: '55%',
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { family: 'Rajdhani', size: 12 }, boxWidth: 12, color: '#10403B' } },
+      datalabels: {
+        color: '#fff',
+        font: { family: 'Rajdhani', size: 11, weight: '600' },
+        formatter: (v, ctx) => {
+          const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+          const pct = total > 0 ? ((v / total) * 100).toFixed(1) : 0;
+          return pct + '%';
+        },
+        display: ctx => {
+          const total = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+          return total > 0 && (ctx.dataset.data[ctx.dataIndex] / total) > 0.04;
+        }
+      }
+    }
+  };
+}
+
 function renderGraficos(registros, de, ate) {
   // Agregar por vendedor
   const porVend = {};
@@ -570,7 +639,7 @@ function renderGraficos(registros, de, ate) {
       labels: vends,
       datasets: [{ data: vends.map(v => porVend[v].valor), backgroundColor: CORES, borderRadius: 6, borderSkipped: false }]
     },
-    options: { ...optsBar(), plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmt(c.raw) } } } }
+    options: optsBar('R$')
   });
 
   // Chart qtd por vendedor
@@ -579,28 +648,36 @@ function renderGraficos(registros, de, ate) {
     type: 'bar',
     data: {
       labels: vends,
-      datasets: [{ data: vends.map(v => porVend[v].qtd), backgroundColor: CORES.map(c => c + 'bb'), borderRadius: 6, borderSkipped: false }]
+      datasets: [{ data: vends.map(v => porVend[v].qtd), backgroundColor: CORES.map(c => c + 'cc'), borderRadius: 6, borderSkipped: false }]
     },
-    options: { ...optsBar(), plugins: { legend: { display: false } } }
+    options: optsBar('qtd')
   });
 
-  // Chart categorias
+  // Chart categorias — doughnut
   const porCat = {};
   registros.forEach(r => {
     const c = r['Categoria'] || 'outros';
     porCat[c] = (porCat[c] || 0) + (Number(r['Total']) || 0);
   });
+  const catLabels = Object.keys(porCat);
+  const catTotal  = Object.values(porCat).reduce((a,b)=>a+b,0);
   destroyChart('cat');
   charts['cat'] = new Chart(document.getElementById('ch-cat'), {
     type: 'doughnut',
     data: {
-      labels: Object.keys(porCat),
+      labels: catLabels,
       datasets: [{ data: Object.values(porCat), backgroundColor: CORES, borderWidth: 2, borderColor: '#fff' }]
     },
-    options: { ...optsDoughnut(), plugins: { legend: { position: 'bottom', labels: { font: { family: 'Rajdhani', size: 12 }, boxWidth: 12 } }, tooltip: { callbacks: { label: c => c.label + ': ' + fmt(c.raw) } } } }
+    options: {
+      ...optsDoughnut(),
+      plugins: {
+        ...optsDoughnut().plugins,
+        tooltip: { callbacks: { label: c => `${c.label}: ${fmt(c.raw)} (${((c.raw/catTotal)*100).toFixed(1)}%)` } }
+      }
+    }
   });
 
-  // Chart top produtos
+  // Chart top produtos — barras horizontais
   const porProd = {};
   registros.forEach(r => {
     const p = r['Produto'] || '—';
@@ -611,13 +688,13 @@ function renderGraficos(registros, de, ate) {
   charts['prod'] = new Chart(document.getElementById('ch-prod'), {
     type: 'bar',
     data: {
-      labels: topProds.map(([k]) => k.length > 28 ? k.slice(0,26)+'…' : k),
-      datasets: [{ data: topProds.map(([,v]) => v), backgroundColor: '#12736988', borderRadius: 4, borderSkipped: false }]
+      labels: topProds.map(([k]) => k.length > 30 ? k.slice(0,28)+'…' : k),
+      datasets: [{ data: topProds.map(([,v]) => v), backgroundColor: CORES[0] + 'bb', borderRadius: 4, borderSkipped: false }]
     },
-    options: { indexAxis: 'y', ...optsBar(), plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmt(c.raw) } } } }
+    options: optsBarH()
   });
 
-  // Chart meta por dia
+  // Chart meta por dia — barras + linha
   const diasMap = {};
   registros.forEach(r => {
     const d = r._data.toISOString().split('T')[0];
@@ -631,34 +708,45 @@ function renderGraficos(registros, de, ate) {
   charts['meta'] = new Chart(document.getElementById('ch-meta'), {
     type: 'bar',
     data: {
-      labels: dias.map(d => { const [y,m,dd] = d.split('-'); return `${dd}/${m}`; }),
+      labels: dias.map(d => { const [,m,dd] = d.split('-'); return `${dd}/${m}`; }),
       datasets: [
-        { label: 'Vendas', data: dias.map(d => diasMap[d].vendas), backgroundColor: '#12736966', borderRadius: 4, borderSkipped: false, order: 2 },
-        { label: 'Meta', data: dias.map(d => diasMap[d].meta), type: 'line', borderColor: '#8AA6A3', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#8AA6A3', tension: 0.3, order: 1 }
+        {
+          label: 'Vendas',
+          data: dias.map(d => diasMap[d].vendas),
+          backgroundColor: CORES[0] + '66',
+          borderRadius: 4, borderSkipped: false, order: 2,
+          datalabels: {
+            anchor: 'end', align: 'end',
+            color: '#10403B', font: { family: 'Rajdhani', size: 9, weight: '600' },
+            formatter: v => v >= 1000 ? 'R$' + (v/1000).toFixed(1) + 'k' : fmt(v),
+            rotation: -45,
+          }
+        },
+        {
+          label: 'Meta',
+          data: dias.map(d => diasMap[d].meta),
+          type: 'line',
+          borderColor: '#8AA6A3', backgroundColor: 'transparent',
+          borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#8AA6A3',
+          tension: 0.3, order: 1,
+          datalabels: { display: false }
+        }
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: { legend: { labels: { font: { family: 'Rajdhani', size: 12 }, boxWidth: 12 } }, tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.raw) } } },
+      plugins: {
+        legend: { labels: { font: { family: 'Rajdhani', size: 12 }, boxWidth: 12, color: '#10403B' } },
+        datalabels: {},
+        tooltip: { callbacks: { label: c => c.dataset.label + ': ' + fmt(c.raw) } }
+      },
       scales: {
-        x: { grid: { display: false }, ticks: { font: { family: 'Rajdhani', size: 11 }, color: '#8a97a8' } },
-        y: { grid: { color: '#e4eaf022' }, ticks: { font: { family: 'Rajdhani', size: 11 }, color: '#8a97a8', callback: v => 'R$' + (v/1000).toFixed(0) + 'k' } }
-      }
+        x: { grid: { display: false }, ticks: { font: { family: 'Rajdhani', size: 10 }, color: '#4C5958', maxRotation: 45 } },
+        y: { display: false, grace: '15%' }
+      },
+      layout: { padding: { top: 28 } }
     }
   });
-}
-
-function optsBar() {
-  return {
-    responsive: true, maintainAspectRatio: false,
-    scales: {
-      x: { grid: { display: false }, ticks: { font: { family: 'Rajdhani', size: 11 }, color: '#8a97a8' } },
-      y: { grid: { color: '#e4eaf033' }, ticks: { font: { family: 'Rajdhani', size: 11 }, color: '#8a97a8' } }
-    }
-  };
-}
-function optsDoughnut() {
-  return { responsive: true, maintainAspectRatio: false, cutout: '60%' };
 }
 
 // ── TABELA VENDEDORES ──
