@@ -276,7 +276,7 @@ async function carregar(){
     popVendFiltro();
     aplicar();
     document.getElementById('last-upd').textContent='Atualizado '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
-  }catch(e){alert('Erro: '+e.message);console.error(e);}
+  }catch(e){console.error('Erro ao carregar:',e.message,e);}
   finally{setLoad(false);}
 }
 
@@ -325,14 +325,14 @@ function aplicar(){
   const[deA,ateA]=getA1([de,ate]);
   const at=filtrar(todos,de,ate,vend,canal);
   const a1=filtrar(todos,deA,ateA,vend,canal);
-  renderKPIs(at,a1);
-  renderCharts(at,de,ate);
-  renderTipoProduto(at);
-  renderAtracao(at);
-  renderAtracaoVend(at);
-  renderExpCompleta(at);
-  renderRankingMuseu(at);
-  renderDetalhamento(at);
+  try { renderKPIs(at,a1); } catch(e) { console.error('renderKPIs:',e); }
+  try { renderCharts(at,de,ate); } catch(e) { console.error('renderCharts:',e); }
+  try { renderTipoProduto(at); } catch(e) { console.error('renderTipoProduto:',e); }
+  try { renderAtracao(at); } catch(e) { console.error('renderAtracao:',e); }
+  try { renderAtracaoVend(at); } catch(e) { console.error('renderAtracaoVend:',e); }
+  try { renderExpCompleta(at); } catch(e) { console.error('renderExpCompleta:',e); }
+  try { renderRankingMuseu(at); } catch(e) { console.error('renderRankingMuseu:',e); }
+  try { renderDetalhamento(at); } catch(e) { console.error('renderDetalhamento:',e); }
 }
 
 // ── KPIs ──
