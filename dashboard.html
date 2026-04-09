@@ -64,29 +64,29 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .ch-scroll::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
 
 /* TABELA */
-.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.tbl{width:100%;border-collapse:collapse;min-width:600px}
-.tbl th{text-align:left;font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding:8px 12px;background:var(--bg);border-bottom:1px solid var(--bd)}
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
+.tbl-wrap::-webkit-scrollbar{height:3px}
+.tbl-wrap::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
+.tbl{width:100%;border-collapse:collapse;min-width:0}
+.tbl th{text-align:left;font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding:7px 10px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap}
 .tbl th.r,.tbl td.r{text-align:right}
-.tbl td{padding:10px 12px;border-bottom:1px solid var(--bd);font-size:13px;font-weight:500}
+.tbl td{padding:9px 10px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:500}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr.vr:hover>td{background:var(--gl);cursor:pointer}
-.exp-btn{width:22px;height:22px;border-radius:5px;background:var(--bg);border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:13px;font-weight:600;color:var(--mu);user-select:none;transition:all .15s}
+.exp-btn{width:20px;height:20px;border-radius:5px;background:var(--bg);border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--mu);user-select:none;transition:all .15s;flex-shrink:0}
 .exp-btn.op{background:var(--g);border-color:var(--g);color:#fff}
 .sub-row{display:none}
 .sub-row.op{display:table-row}
-.tag{display:inline-block;padding:2px 7px;border-radius:8px;font-size:10px;font-weight:600}
+.tag{display:inline-block;padding:2px 6px;border-radius:8px;font-size:10px;font-weight:600;white-space:nowrap}
 .tag-bil{background:#dde8e7;color:#127369}
 .tag-pos{background:#e8f0ef;color:#4C5958}
-.tag-g{background:var(--gl);color:var(--g);padding:2px 8px;border-radius:8px;font-size:11px;font-weight:600}
 .val-g{color:var(--g);font-weight:600}
-.sep{height:1px;background:var(--bd);margin:20px 0}
 
 /* GRID TABELAS 3+3 */
-.tbl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-.tbl-grid .card { margin-bottom: 0; }
-@media(max-width:900px){ .tbl-grid { grid-template-columns: 1fr 1fr; } }
-@media(max-width:600px){ .tbl-grid { grid-template-columns: 1fr; } }
+.tbl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.tbl-grid .card{margin-bottom:0;overflow:hidden}
+@media(max-width:1000px){.tbl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.tbl-grid{grid-template-columns:minmax(0,1fr)}}
 
 @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.g3{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.kpi-grid{grid-template-columns:1fr 1fr}.g2,.g3{grid-template-columns:1fr}.page{padding:14px 10px 60px}}
@@ -128,7 +128,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
     <option value="">Todos</option><option value="Bilheteria">Bilheteria</option><option value="POS">POS</option>
   </select>
   <span class="flt-lbl">Categoria</span>
-  <select id="f-cat" onchange="aplicar()">
+  <select id="f-cat" onchange="onCatChange()">
     <option value="">Todas</option>
     <option value="avulso">Avulso</option>
     <option value="combo_duplo">Combo Duplo</option>
@@ -136,17 +136,14 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
     <option value="exp_completa">Exp. Completa</option>
     <option value="complementos">Complementos</option>
   </select>
-  <span class="flt-lbl">Atração</span>
+  <span class="flt-lbl">Atração / Produto</span>
   <select id="f-atr" onchange="aplicar()">
     <option value="">Todas</option>
-    <option value="museu">Museu</option>
-    <option value="gex">GEX</option>
-    <option value="mar">MAR</option>
   </select>
-  <span class="flt-lbl">Tipo</span>
+  <span class="flt-lbl">Tipo Museu</span>
   <select id="f-tipo" onchange="aplicar()">
     <option value="">Todos</option>
-    <option value="museu_venda">Venda Museu</option>
+    <option value="museu_venda">Só Museu</option>
     <option value="todas_atracoes">Todas as Atrações</option>
   </select>
   <button class="btn-ref" onclick="carregar()">
@@ -196,7 +193,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   </div>
   <div class="card">
     <div class="sec-title">Atração por Vendedor</div>
-    <div class="tbl-wrap"><table class="tbl" style="min-width:360px"><thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-atr-vend-body"></tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-atr-vend-body"></tbody></table></div>
   </div>
 </div>
 
@@ -208,13 +205,13 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   </div>
   <div class="card">
     <div class="sec-title">Ranking — Base Museu</div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Pos.</th><th>Vendedor</th><th class="r">Ingressos</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-rank-body"></tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Vendedor</th><th class="r">Ingressos</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-rank-body"></tbody></table></div>
   </div>
   <div class="card">
     <div class="sec-title">Detalhamento por Vendedor</div>
     <div class="tbl-wrap">
-      <table class="tbl" style="min-width:480px">
-        <thead><tr><th style="width:28px"></th><th>Vendedor</th><th class="r">Vendas</th><th class="r">Qtd</th><th class="r">Ticket</th><th class="r" style="white-space:nowrap">Canal</th></tr></thead>
+      <table class="tbl">
+        <thead><tr><th style="width:24px"></th><th>Vendedor</th><th class="r">Vendas</th><th class="r">Qtd</th><th class="r" style="white-space:nowrap">Canal</th></tr></thead>
         <tbody id="tbl-vend-body"></tbody>
       </table>
     </div>
@@ -232,6 +229,31 @@ const CORES = ['#127369','#8AA6A3','#4C5958','#10403B','#6B9E9A','#2E6B65','#A8C
 const fmt   = v => 'R$ ' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtN  = v => Number(v).toLocaleString('pt-BR');
 const pct   = (a,b) => b > 0 ? ((a/b)*100).toFixed(1)+'%' : '—';
+
+// Produtos por categoria — para popular o filtro de Atração/Produto
+const PRODS_POR_CAT = {
+  avulso: ['MUSEU DE CERA - VISITANTES','MUSEU DE CERA - INTEIRA','MUSEU DE CERA - MEIA','GEX - INTEIRA','GEX - MEIA','GEX - COMPLEMENTO','GEX - INFANTIL','MAR DE ESPELHOS - INTEIRA','MAR DE ESPELHOS - MEIA'],
+  combo_duplo: ['COMBO AQUA + MUSEU - INTEIRA','COMBO AQUA + MUSEU - MEIA','COMBO AQUA + MUSEU - PROMO RJ','COMBO AQUA + MUSEU - INFANTIL','COMBO AQUA + GEX - INTEIRA','COMBO AQUA + GEX - MEIA','COMBO AQUA + GEX - PROMO RJ','COMBO AQUA + GEX - INFANTIL','COMBO AQUA + MAR - INTEIRA','COMBO AQUA + MAR - MEIA','COMBO AQUA + MAR - PROMO RJ','COMBO AQUA + MAR - INFANTIL'],
+  combo_triplo: ['COMBO AQUA + MAR + MUSEU - INTEIRA','COMBO AQUA + MAR + MUSEU - MEIA','COMBO AQUA + MAR + MUSEU - PROMO RJ','COMBO AQUA + MAR + MUSEU - INFANTIL','COMBO AQUA + MUSEU + GEX - INTEIRA','COMBO AQUA + MUSEU + GEX - MEIA','COMBO AQUA + MUSEU + GEX - PROMO RJ','COMBO AQUA + MUSEU + GEX - INFANTIL','COMBO AQUA + MAR + GEX - INTEIRA','COMBO AQUA + MAR + GEX - MEIA','COMBO AQUA + MAR + GEX - PROMO RJ','COMBO AQUA + MAR + GEX - INFANTIL'],
+  exp_completa: ['EXPERIENCIA COMPLETA + GEX - INTEIRA','EXPERIENCIA COMPLETA + GEX - MEIA','EXPERIENCIA COMPLETA + GEX - PROMO RJ','EXPERIENCIA COMPLETA + GEX - INFANTIL'],
+  complementos: ['MUSEU + MAR - DUAS ATRAÇÕES','MUSEU + MAR - DUAS ATRAÇÕES MEIA','MUSEU + GEX - DUAS ATRAÇÕES','MUSEU + GEX - DUAS ATRAÇÕES MEIA','MAR + MUSEU + GEX - TRÊS ATRAÇÕES','MAR + GEX - DUAS ATRAÇÕES','MAR + GEX - DUAS ATRAÇÕES MEIA'],
+};
+const TODOS_PRODS = Object.values(PRODS_POR_CAT).flat();
+
+function onCatChange() {
+  const cat = document.getElementById('f-cat').value;
+  const sel = document.getElementById('f-atr');
+  const cur = sel.value;
+  const lista = cat ? (PRODS_POR_CAT[cat] || []) : TODOS_PRODS;
+  sel.innerHTML = '<option value="">Todas</option>';
+  lista.forEach(p => {
+    const o = document.createElement('option');
+    o.value = p; o.textContent = p; sel.appendChild(o);
+  });
+  // Manter seleção se ainda válida
+  if (cur && lista.includes(cur)) sel.value = cur;
+  aplicar();
+}
 
 // Produtos que contêm cada atração
 const TEM_MUSEU = [
@@ -336,12 +358,7 @@ function filtrar(recs,de,ate,vend,canal,cat,atr,tipo){
     if(vend&&r['Vendedor']!==vend)return false;
     if(canal&&r['Canal']!==canal)return false;
     if(cat&&r['Categoria']!==cat)return false;
-    if(atr){
-      const p=r['Produto'];
-      if(atr==='museu'&&!TEM_MUSEU.includes(p))return false;
-      if(atr==='gex'&&!TEM_GEX.includes(p))return false;
-      if(atr==='mar'&&!TEM_MAR.includes(p))return false;
-    }
+    if(atr&&r['Produto']!==atr)return false;
     if(tipo){
       const p=r['Produto'];
       if(tipo==='museu_venda'&&!TEM_MUSEU.includes(p))return false;
@@ -552,7 +569,7 @@ function renderRankingMuseu(at){
   const tb=document.getElementById('tbl-rank-body');tb.innerHTML='';
   Object.entries(por).sort((a,b)=>b[1].ing-a[1].ing).forEach(([v,d],i)=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600;color:var(--mu2)">#${i+1}</td><td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.ing)}</td><td class="r">${fmt(d.val)}</td><td class="r">${pct(d.ing,totalIng)}</td>`;
+    tr.innerHTML=`<td style="font-weight:600;color:var(--mu2)">#${i+1}</td><td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.ing)}</td><td class="r">${pct(d.ing,totalIng)}</td>`;
     tb.appendChild(tr);
   });
 }
