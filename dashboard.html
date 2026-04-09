@@ -132,6 +132,23 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
 .meta-bar-bg { width: 100%; height: 10px; background: var(--bg); border-radius: 5px; margin-top: 16px; overflow: hidden; }
 .meta-bar-fill { height: 100%; border-radius: 5px; background: var(--green); transition: width 0.6s ease; }
 
+/* ── SCROLL EM GRÁFICOS ── */
+.chart-scroll-wrap {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+.chart-scroll-wrap::-webkit-scrollbar { height: 4px; }
+.chart-scroll-wrap::-webkit-scrollbar-track { background: transparent; }
+.chart-scroll-wrap::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 2px; }
+
+/* Tabela com scroll horizontal */
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.table-scroll::-webkit-scrollbar { height: 4px; }
+.table-scroll::-webkit-scrollbar-track { background: transparent; }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 2px; }
+.vend-table { min-width: 560px; }
+
 /* ── TABELA VENDEDORES ── */
 .table-card {
   background: var(--white); border-radius: 16px; padding: 20px;
@@ -298,11 +315,15 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
   <div class="charts-grid-2">
     <div class="chart-card">
       <div class="section-title">Vendas por Vendedor</div>
-      <div class="chart-wrap"><canvas id="ch-vend-valor"></canvas></div>
+      <div class="chart-scroll-wrap">
+        <div class="chart-wrap" id="wrap-vend-valor"><canvas id="ch-vend-valor"></canvas></div>
+      </div>
     </div>
     <div class="chart-card">
       <div class="section-title">Qtd Vendida por Vendedor</div>
-      <div class="chart-wrap"><canvas id="ch-vend-qtd"></canvas></div>
+      <div class="chart-scroll-wrap">
+        <div class="chart-wrap" id="wrap-vend-qtd"><canvas id="ch-vend-qtd"></canvas></div>
+      </div>
     </div>
   </div>
 
@@ -321,25 +342,29 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
   <!-- GRÁFICO META -->
   <div class="chart-card-full">
     <div class="section-title">Atingimento da Meta — por dia</div>
-    <div class="chart-wrap-tall"><canvas id="ch-meta"></canvas></div>
+    <div class="chart-scroll-wrap">
+      <div class="chart-wrap-tall" id="wrap-meta"><canvas id="ch-meta"></canvas></div>
+    </div>
   </div>
 
   <!-- TABELA VENDEDORES -->
   <div class="section-title">Detalhamento por Vendedor</div>
   <div class="table-card">
-    <table class="vend-table" id="tabela-vend">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Vendedor</th>
-          <th>Vendas (R$)</th>
-          <th>Qtd</th>
-          <th>Ticket Médio</th>
-          <th>Canal Princ.</th>
-        </tr>
-      </thead>
-      <tbody id="tabela-vend-body"></tbody>
-    </table>
+    <div class="table-scroll">
+      <table class="vend-table" id="tabela-vend">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Vendedor</th>
+            <th>Vendas (R$)</th>
+            <th>Qtd</th>
+            <th>Ticket Médio</th>
+            <th>Canal Princ.</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-vend-body"></tbody>
+      </table>
+    </div>
   </div>
 
 </div><!-- /page -->
@@ -549,6 +574,21 @@ function renderKPIs(atual, a1) {
   }
 }
 
+// ── LARGURA SCROLL ──
+const BAR_W = 60; // px por barra
+const BAR_MIN_VISIBLE_VEND = 5;
+const BAR_MIN_VISIBLE_META = 8;
+
+function ajustarLargura(wrapId, nBars, minVisible) {
+  const wrap = document.getElementById(wrapId);
+  if (!wrap) return;
+  if (nBars > minVisible) {
+    wrap.style.width = (nBars * BAR_W) + 'px';
+  } else {
+    wrap.style.width = '100%';
+  }
+}
+
 // ── GRÁFICOS ──
 function destroyChart(id) { if (charts[id]) { charts[id].destroy(); delete charts[id]; } }
 
@@ -632,6 +672,7 @@ function renderGraficos(registros, de, ate) {
   const vends = Object.keys(porVend).sort((a,b) => porVend[b].valor - porVend[a].valor);
 
   // Chart vendas por vendedor
+  ajustarLargura('wrap-vend-valor', vends.length, BAR_MIN_VISIBLE_VEND);
   destroyChart('vv');
   charts['vv'] = new Chart(document.getElementById('ch-vend-valor'), {
     type: 'bar',
@@ -643,6 +684,7 @@ function renderGraficos(registros, de, ate) {
   });
 
   // Chart qtd por vendedor
+  ajustarLargura('wrap-vend-qtd', vends.length, BAR_MIN_VISIBLE_VEND);
   destroyChart('vq');
   charts['vq'] = new Chart(document.getElementById('ch-vend-qtd'), {
     type: 'bar',
@@ -704,6 +746,7 @@ function renderGraficos(registros, de, ate) {
     if (m > diasMap[d].meta) diasMap[d].meta = m;
   });
   const dias = Object.keys(diasMap).sort();
+  ajustarLargura('wrap-meta', dias.length, BAR_MIN_VISIBLE_META);
   destroyChart('meta');
   charts['meta'] = new Chart(document.getElementById('ch-meta'), {
     type: 'bar',
