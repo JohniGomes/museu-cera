@@ -613,8 +613,22 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     <!-- DIVISOR META -->
     <div class="sec-sep" style="margin-top:8px">
       <div class="sec-sep-line"></div>
-      <div class="sec-sep-txt">Referência</div>
+      <div class="sec-sep-txt">Referência do dia</div>
       <div class="sec-sep-line"></div>
+    </div>
+
+    <!-- PAX AQUÁRIO -->
+    <div class="field">
+      <div class="field-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+      </div>
+      <div class="field-body">
+        <div class="field-lbl">PAX Aquário<small> · visitantes do dia</small></div>
+        <div class="field-ctrl"><input type="number" id="f-pax" placeholder="Ex: 350" min="0"></div>
+      </div>
     </div>
 
     <!-- META -->
@@ -896,6 +910,7 @@ async function salvar() {
   const qtd      = parseInt(document.getElementById('f-qtd').value) || 1;
   const canal    = document.querySelector('input[name="canal"]:checked').value;
   const meta     = document.getElementById('f-meta').value;
+  const pax      = document.getElementById('f-pax').value;
   const catEl    = document.querySelector('input[name="cat"]:checked');
   const categoria = catEl ? catEl.value : '';
 
@@ -906,15 +921,14 @@ async function salvar() {
 
   const [nomeProd, preco] = produto.split('|');
   const reg = {
-    data,
-    vendedor,
-    categoria,
+    data, vendedor, categoria,
     produto: nomeProd,
     valorUnitario: Number(preco),
     valorMuseu: museuVal[nomeProd] || 0,
     quantidade: qtd,
     total: Number(preco) * qtd,
     canal,
+    pax: pax ? Number(pax) : null,
     meta: meta ? Number(meta) : null,
     ts: new Date().toISOString()
   };
@@ -965,6 +979,7 @@ function limpar() {
   document.querySelectorAll('input[name="cat"]').forEach(r => r.checked = false);
   document.getElementById('cdd-panel').innerHTML = '';
   document.getElementById('f-qtd').value  = 1;
+  document.getElementById('f-pax').value  = '';
   document.getElementById('f-meta').value = '';
   document.querySelector('input[name="canal"][value="Bilheteria"]').checked = true;
   document.getElementById('row-badge').style.display = 'none';
