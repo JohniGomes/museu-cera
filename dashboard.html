@@ -82,7 +82,12 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .val-g{color:var(--g);font-weight:600}
 .sep{height:1px;background:var(--bd);margin:20px 0}
 
-/* MOBILE */
+/* GRID TABELAS 3+3 */
+.tbl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+.tbl-grid .card { margin-bottom: 0; }
+@media(max-width:900px){ .tbl-grid { grid-template-columns: 1fr 1fr; } }
+@media(max-width:600px){ .tbl-grid { grid-template-columns: 1fr; } }
+
 @media(max-width:900px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.g3{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.kpi-grid{grid-template-columns:1fr 1fr}.g2,.g3{grid-template-columns:1fr}.page{padding:14px 10px 60px}}
 </style>
@@ -122,6 +127,28 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <select id="f-canal" onchange="aplicar()">
     <option value="">Todos</option><option value="Bilheteria">Bilheteria</option><option value="POS">POS</option>
   </select>
+  <span class="flt-lbl">Categoria</span>
+  <select id="f-cat" onchange="aplicar()">
+    <option value="">Todas</option>
+    <option value="avulso">Avulso</option>
+    <option value="combo_duplo">Combo Duplo</option>
+    <option value="combo_triplo">Combo Triplo</option>
+    <option value="exp_completa">Exp. Completa</option>
+    <option value="complementos">Complementos</option>
+  </select>
+  <span class="flt-lbl">Atração</span>
+  <select id="f-atr" onchange="aplicar()">
+    <option value="">Todas</option>
+    <option value="museu">Museu</option>
+    <option value="gex">GEX</option>
+    <option value="mar">MAR</option>
+  </select>
+  <span class="flt-lbl">Tipo</span>
+  <select id="f-tipo" onchange="aplicar()">
+    <option value="">Todos</option>
+    <option value="museu_venda">Venda Museu</option>
+    <option value="todas_atracoes">Todas as Atrações</option>
+  </select>
   <button class="btn-ref" onclick="carregar()">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
     Atualizar
@@ -146,9 +173,8 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 </div>
 
 <!-- ── GRÁFICOS LINHA 2 ── -->
-<div class="g3">
-  <div class="card"><div class="sec-title">Vendas por Categoria</div><div class="ch"><canvas id="ch-cat"></canvas></div></div>
-  <div class="card"><div class="sec-title">Por Tipo de Produto</div><div class="ch"><canvas id="ch-tipo"></canvas></div></div>
+<div class="g2">
+  <div class="card"><div class="sec-title">Por Tipo de Venda</div><div class="ch"><canvas id="ch-tipo"></canvas></div></div>
   <div class="card"><div class="sec-title">Por Atração</div><div class="ch"><canvas id="ch-atr"></canvas></div></div>
 </div>
 
@@ -158,44 +184,40 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="ch-scroll"><div class="ch-tall" id="w-meta"><canvas id="ch-meta"></canvas></div></div>
 </div>
 
-<!-- ── ANÁLISE POR TIPO DE VENDA ── -->
-<div class="sec-title" style="margin-bottom:14px">Análise por Tipo de Venda / Produto</div>
-<div class="card g1">
-  <div class="tbl-wrap"><table class="tbl" id="tbl-tipo"><thead><tr><th>Tipo / Produto</th><th class="r">Qtd</th><th class="r">Valor Total</th><th class="r">Part. %</th></tr></thead><tbody id="tbl-tipo-body"></tbody></table></div>
+<!-- ── TABELAS LINHA 1 ── -->
+<div class="tbl-grid">
+  <div class="card">
+    <div class="sec-title">Tipo de Venda e Produto</div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Categoria / Produto</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-tipo-body"></tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="sec-title">Por Atração</div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Atração</th><th class="r">Ingressos</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-atr-body"></tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="sec-title">Atração por Vendedor</div>
+    <div class="tbl-wrap"><table class="tbl" style="min-width:360px"><thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-atr-vend-body"></tbody></table></div>
+  </div>
 </div>
 
-<!-- ── ANÁLISE POR ATRAÇÃO ── -->
-<div class="sec-title" style="margin-bottom:14px">Análise por Atração (Museu / GEX / MAR)</div>
-<div class="card g1">
-  <div class="tbl-wrap"><table class="tbl" id="tbl-atr"><thead><tr><th>Atração</th><th class="r">Ingressos</th><th class="r">Valor (parte)</th><th class="r">Part. %</th></tr></thead><tbody id="tbl-atr-body"></tbody></table></div>
-</div>
-
-<!-- ── ANÁLISE POR ATRAÇÃO POR VENDEDOR ── -->
-<div class="sec-title" style="margin-bottom:14px">Atração por Vendedor</div>
-<div class="card g1">
-  <div class="tbl-wrap"><table class="tbl" id="tbl-atr-vend"><thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Total</th><th class="r">Part. Time</th></tr></thead><tbody id="tbl-atr-vend-body"></tbody></table></div>
-</div>
-
-<!-- ── EXP. COMPLETA E 3 PASSEIOS ── -->
-<div class="sec-title" style="margin-bottom:14px">Exp. Completa + 3 Passeios</div>
-<div class="card g1">
-  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Produto</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Part. % Total Museu</th></tr></thead><tbody id="tbl-exp-body"></tbody></table></div>
-</div>
-
-<!-- ── RANKING MUSEU ── -->
-<div class="sec-title" style="margin-bottom:14px">Ranking de Vendedores — Base Museu</div>
-<div class="card g1">
-  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Pos.</th><th>Vendedor</th><th class="r">Ingressos Museu</th><th class="r">Valor Museu</th><th class="r">Part. %</th></tr></thead><tbody id="tbl-rank-body"></tbody></table></div>
-</div>
-
-<!-- ── DETALHAMENTO VENDEDORES ── -->
-<div class="sec-title" style="margin-bottom:14px">Detalhamento por Vendedor</div>
-<div class="card g1">
-  <div class="tbl-wrap">
-    <table class="tbl" style="min-width:680px">
-      <thead><tr><th></th><th>Vendedor</th><th class="r">Vendas R$</th><th class="r">Qtd</th><th class="r">Ticket Médio</th><th class="r">Canal Princ.</th></tr></thead>
-      <tbody id="tbl-vend-body"></tbody>
-    </table>
+<!-- ── TABELAS LINHA 2 ── -->
+<div class="tbl-grid">
+  <div class="card">
+    <div class="sec-title">Exp. Completa + 3 Passeios</div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Grupo</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-exp-body"></tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="sec-title">Ranking — Base Museu</div>
+    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Pos.</th><th>Vendedor</th><th class="r">Ingressos</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-rank-body"></tbody></table></div>
+  </div>
+  <div class="card">
+    <div class="sec-title">Detalhamento por Vendedor</div>
+    <div class="tbl-wrap">
+      <table class="tbl" style="min-width:480px">
+        <thead><tr><th style="width:28px"></th><th>Vendedor</th><th class="r">Vendas</th><th class="r">Qtd</th><th class="r">Ticket</th><th class="r" style="white-space:nowrap">Canal</th></tr></thead>
+        <tbody id="tbl-vend-body"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -308,11 +330,23 @@ function getRange(per){
   s.setDate(1);return[s,h];
 }
 function getA1([de,ate]){return[new Date(de-365*864e5),new Date(ate-365*864e5)];}
-function filtrar(recs,de,ate,vend,canal){
+function filtrar(recs,de,ate,vend,canal,cat,atr,tipo){
   return recs.filter(r=>{
     if(r._data<de||r._data>ate)return false;
     if(vend&&r['Vendedor']!==vend)return false;
     if(canal&&r['Canal']!==canal)return false;
+    if(cat&&r['Categoria']!==cat)return false;
+    if(atr){
+      const p=r['Produto'];
+      if(atr==='museu'&&!TEM_MUSEU.includes(p))return false;
+      if(atr==='gex'&&!TEM_GEX.includes(p))return false;
+      if(atr==='mar'&&!TEM_MAR.includes(p))return false;
+    }
+    if(tipo){
+      const p=r['Produto'];
+      if(tipo==='museu_venda'&&!TEM_MUSEU.includes(p))return false;
+      if(tipo==='todas_atracoes'&&!(TEM_MUSEU.includes(p)&&TEM_GEX.includes(p)&&TEM_MAR.includes(p)))return false;
+    }
     return true;
   });
 }
@@ -321,10 +355,13 @@ function aplicar(){
   const per=document.getElementById('f-per').value;
   const vend=document.getElementById('f-vend').value;
   const canal=document.getElementById('f-canal').value;
+  const cat=document.getElementById('f-cat').value;
+  const atr=document.getElementById('f-atr').value;
+  const tipo=document.getElementById('f-tipo').value;
   const[de,ate]=getRange(per);
   const[deA,ateA]=getA1([de,ate]);
-  const at=filtrar(todos,de,ate,vend,canal);
-  const a1=filtrar(todos,deA,ateA,vend,canal);
+  const at=filtrar(todos,de,ate,vend,canal,cat,atr,tipo);
+  const a1=filtrar(todos,deA,ateA,vend,canal,cat,atr,tipo);
   try { renderKPIs(at,a1); } catch(e) { console.error('renderKPIs:',e); }
   try { renderCharts(at,de,ate); } catch(e) { console.error('renderCharts:',e); }
   try { renderTipoProduto(at); } catch(e) { console.error('renderTipoProduto:',e); }
@@ -416,10 +453,6 @@ function renderCharts(at,de,ate){
   if(vends.length>5)document.getElementById('w-vq').style.width=(vends.length*BW)+'px';
   dc('vv');charts['vv']=new Chart(document.getElementById('ch-vv'),{type:'bar',data:{labels:vends,datasets:[{data:vends.map(v=>pv[v].val),backgroundColor:CORES,borderRadius:5,borderSkipped:false}]},options:optsBarV(fmt)});
   dc('vq');charts['vq']=new Chart(document.getElementById('ch-vq'),{type:'bar',data:{labels:vends,datasets:[{data:vends.map(v=>pv[v].qtd),backgroundColor:CORES.map(c=>c+'cc'),borderRadius:5,borderSkipped:false}]},options:optsBarV(fmtN)});
-
-  // Categorias
-  const pcat={};at.forEach(r=>{const c=r['Categoria']||'outros';pcat[c]=(pcat[c]||0)+(Number(r['Total'])||0);});
-  dc('cat');charts['cat']=new Chart(document.getElementById('ch-cat'),{type:'doughnut',data:{labels:Object.keys(pcat),datasets:[{data:Object.values(pcat),backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
 
   // Por tipo (avulso vs combo)
   const tipos={Avulso:0,'Combo Duplo':0,'Combo Triplo':0,'Exp. Completa':0,Complementos:0};
