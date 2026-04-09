@@ -95,6 +95,8 @@ body {
   border-bottom: 1px solid var(--border);
   gap: 12px;
   min-height: 60px;
+  position: relative;
+  overflow: visible;
 }
 .field:last-child { border-bottom: none; }
 
@@ -186,17 +188,17 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .cdd-trigger svg { flex-shrink: 0; opacity: 0.4; transition: transform 0.2s; }
 .cdd.open .cdd-trigger svg { transform: rotate(180deg); opacity: 0.7; }
 
-.modal-overlay.open ~ * .cdd-panel,
-.modal-overlay.open + * .cdd-panel { display: none !important; }
-
 .cdd-panel {
   display: none;
-  position: fixed;
+  position: absolute;
+  top: calc(100% + 8px);
+  left: -20px;
+  width: calc(100% + 40px);
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: 0 12px 40px rgba(0,0,0,0.14);
-  z-index: 999;
+  z-index: 500;
   max-height: 300px;
   overflow-y: auto;
 }
@@ -772,15 +774,7 @@ function onCategoria() {
 // Abrir/fechar dropdown produto
 document.getElementById('cdd-btn').addEventListener('click', function(e) {
   e.stopPropagation();
-  const cdd = document.getElementById('cdd');
-  const isOpen = cdd.classList.contains('open');
-  if (isOpen) { cdd.classList.remove('open'); return; }
-  const rect = this.getBoundingClientRect();
-  const panel = document.getElementById('cdd-panel');
-  panel.style.top   = (rect.bottom + 6) + 'px';
-  panel.style.left  = Math.max(8, rect.left - 16) + 'px';
-  panel.style.width = Math.min(window.innerWidth - 16, rect.width + 32) + 'px';
-  cdd.classList.add('open');
+  document.getElementById('cdd').classList.toggle('open');
 });
 
 // Selecionar opção
@@ -889,16 +883,10 @@ document.getElementById('m-nome').addEventListener('keydown', e => { if (e.key =
 // Abrir/fechar modal
 document.getElementById('btn-vend-open').addEventListener('click', function(e) {
   e.stopPropagation();
-  // Fechar dropdown completamente
-  const cdd = document.getElementById('cdd');
-  cdd.classList.remove('open');
-  document.getElementById('cdd-panel').style.display = 'none';
+  document.getElementById('cdd').classList.remove('open');
   renderLista();
   document.getElementById('modal').classList.add('open');
-  setTimeout(() => {
-    document.getElementById('cdd-panel').style.display = '';
-    document.getElementById('m-nome').focus();
-  }, 300);
+  setTimeout(() => document.getElementById('m-nome').focus(), 100);
 });
 
 document.getElementById('modal').addEventListener('click', function(e) {
