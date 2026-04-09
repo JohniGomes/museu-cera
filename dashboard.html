@@ -67,17 +67,17 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
 .tbl-wrap::-webkit-scrollbar{height:3px}
 .tbl-wrap::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
-.tbl{width:100%;border-collapse:collapse;min-width:0}
-.tbl th{text-align:left;font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding:7px 10px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap}
+.tbl{width:100%;border-collapse:collapse;min-width:0;table-layout:fixed}
+.tbl th{text-align:left;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tbl th.r,.tbl td.r{text-align:right}
-.tbl td{padding:9px 10px;border-bottom:1px solid var(--bd);font-size:12px;font-weight:500}
+.tbl td{padding:8px 8px;border-bottom:1px solid var(--bd);font-size:11px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr.vr:hover>td{background:var(--gl);cursor:pointer}
-.exp-btn{width:20px;height:20px;border-radius:5px;background:var(--bg);border:1.5px solid var(--bd);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--mu);user-select:none;transition:all .15s;flex-shrink:0}
+.exp-btn{width:20px;height:20px;border-radius:5px;background:var(--bg);border:1.5px solid var(--bd);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--mu);user-select:none;transition:all .15s;flex-shrink:0}
 .exp-btn.op{background:var(--g);border-color:var(--g);color:#fff}
 .sub-row{display:none}
 .sub-row.op{display:table-row}
-.tag{display:inline-block;padding:2px 6px;border-radius:8px;font-size:10px;font-weight:600;white-space:nowrap}
+.tag{display:inline-block;padding:1px 5px;border-radius:6px;font-size:9px;font-weight:600;white-space:nowrap}
 .tag-bil{background:#dde8e7;color:#127369}
 .tag-pos{background:#e8f0ef;color:#4C5958}
 .val-g{color:var(--g);font-weight:600}
@@ -185,15 +185,27 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 <div class="tbl-grid">
   <div class="card">
     <div class="sec-title">Tipo de Venda e Produto</div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Categoria / Produto</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-tipo-body"></tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl">
+      <colgroup><col style="width:22px"><col><col style="width:44px"><col style="width:70px"><col style="width:48px"></colgroup>
+      <thead><tr><th></th><th>Categoria / Produto</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead>
+      <tbody id="tbl-tipo-body"></tbody>
+    </table></div>
   </div>
   <div class="card">
     <div class="sec-title">Por Atração</div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Atração</th><th class="r">Ingressos</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-atr-body"></tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl">
+      <colgroup><col><col style="width:60px"><col style="width:80px"><col style="width:48px"></colgroup>
+      <thead><tr><th>Atração</th><th class="r">Ing.</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead>
+      <tbody id="tbl-atr-body"></tbody>
+    </table></div>
   </div>
   <div class="card">
     <div class="sec-title">Atração por Vendedor</div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-atr-vend-body"></tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl">
+      <colgroup><col><col style="width:44px"><col style="width:44px"><col style="width:44px"><col style="width:48px"></colgroup>
+      <thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Part.%</th></tr></thead>
+      <tbody id="tbl-atr-vend-body"></tbody>
+    </table></div>
   </div>
 </div>
 
@@ -201,17 +213,26 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 <div class="tbl-grid">
   <div class="card">
     <div class="sec-title">Exp. Completa + 3 Passeios</div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Grupo</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-exp-body"></tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl">
+      <colgroup><col><col style="width:40px"><col style="width:80px"><col style="width:50px"></colgroup>
+      <thead><tr><th>Grupo</th><th class="r">Qtd</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead>
+      <tbody id="tbl-exp-body"></tbody>
+    </table></div>
   </div>
   <div class="card">
     <div class="sec-title">Ranking — Base Museu</div>
-    <div class="tbl-wrap"><table class="tbl"><thead><tr><th>#</th><th>Vendedor</th><th class="r">Ingressos</th><th class="r">Part.%</th></tr></thead><tbody id="tbl-rank-body"></tbody></table></div>
+    <div class="tbl-wrap"><table class="tbl">
+      <colgroup><col style="width:28px"><col><col style="width:56px"><col style="width:48px"></colgroup>
+      <thead><tr><th>#</th><th>Vendedor</th><th class="r">Ing.</th><th class="r">Part.%</th></tr></thead>
+      <tbody id="tbl-rank-body"></tbody>
+    </table></div>
   </div>
   <div class="card">
     <div class="sec-title">Detalhamento por Vendedor</div>
     <div class="tbl-wrap">
       <table class="tbl">
-        <thead><tr><th style="width:24px"></th><th>Vendedor</th><th class="r">Vendas</th><th class="r">Qtd</th><th class="r" style="white-space:nowrap">Canal</th></tr></thead>
+        <colgroup><col style="width:24px"><col><col style="width:68px"><col style="width:36px"><col style="width:60px"></colgroup>
+        <thead><tr><th></th><th>Vendedor</th><th class="r">Vendas</th><th class="r">Qtd</th><th class="r">Canal</th></tr></thead>
         <tbody id="tbl-vend-body"></tbody>
       </table>
     </div>
@@ -506,7 +527,7 @@ function renderTipoProduto(at){
     tb.appendChild(tr);
     const subTr=document.createElement('tr');subTr.className='sub-row';subTr.id=`stp-${gi}`;
     const prods=Object.entries(d.prods).sort((a,b)=>b[1].val-a[1].val);
-    subTr.innerHTML=`<td colspan="5" style="padding:0"><table style="width:100%;border-collapse:collapse;background:var(--gl)"><tr style="border-bottom:1px solid var(--bd)"><th style="padding:5px 5px 5px 40px;font-size:10px;font-weight:600;color:var(--mu2);text-align:left">Produto</th><th style="padding:5px;font-size:10px;font-weight:600;color:var(--mu2);text-align:right">Qtd</th><th style="padding:5px;font-size:10px;font-weight:600;color:var(--mu2);text-align:right">Valor</th><th style="padding:5px;font-size:10px;font-weight:600;color:var(--mu2);text-align:right">Part.%</th></tr>${prods.map(([p,v])=>`<tr><td style="padding:7px 5px 7px 40px;font-size:12px;color:var(--mu)">${p}</td><td style="text-align:right;padding:7px 5px;font-size:12px">${fmtN(v.qtd)}</td><td style="text-align:right;padding:7px 5px;font-size:12px;color:var(--g);font-weight:600">${fmt(v.val)}</td><td style="text-align:right;padding:7px 5px;font-size:12px">${pct(v.val,totalVal)}</td></tr>`).join('')}</table></td>`;
+    subTr.innerHTML=`<td colspan="5" style="padding:0"><table style="width:100%;border-collapse:collapse;background:var(--gl);table-layout:fixed"><tr style="border-bottom:1px solid var(--bd)"><th style="padding:5px 5px 5px 32px;font-size:9px;font-weight:600;color:var(--mu2);text-align:left">Produto</th><th style="padding:5px;font-size:9px;font-weight:600;color:var(--mu2);text-align:right;width:40px">Qtd</th><th style="padding:5px;font-size:9px;font-weight:600;color:var(--mu2);text-align:right;width:72px">Valor</th><th style="padding:5px;font-size:9px;font-weight:600;color:var(--mu2);text-align:right;width:46px">Part.%</th></tr>${prods.map(([p,v])=>`<tr><td style="padding:5px 5px 5px 32px;font-size:10px;color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p}</td><td style="text-align:right;padding:5px;font-size:10px;white-space:nowrap">${fmtN(v.qtd)}</td><td style="text-align:right;padding:5px;font-size:10px;color:var(--g);font-weight:600;white-space:nowrap">${fmt(v.val)}</td><td style="text-align:right;padding:5px;font-size:10px;white-space:nowrap">${pct(v.val,totalVal)}</td></tr>`).join('')}</table></td>`;
     tb.appendChild(subTr);
   });
 }
@@ -536,7 +557,7 @@ function renderAtracaoVend(at){
   Object.entries(por).sort((a,b)=>b[1].museu-a[1].museu).forEach(([v,d])=>{
     const tot=d.museu+d.gex+d.mar;
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.museu)}</td><td class="r">${fmtN(d.gex)}</td><td class="r">${fmtN(d.mar)}</td><td class="r">${fmtN(tot)}</td><td class="r">${pct(d.museu,totalMuseu)}</td>`;
+    tr.innerHTML=`<td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.museu)}</td><td class="r">${fmtN(d.gex)}</td><td class="r">${fmtN(d.mar)}</td><td class="r">${pct(d.museu,totalMuseu)}</td>`;
     tb.appendChild(tr);
   });
 }
@@ -585,11 +606,11 @@ function renderDetalhamento(at){
     const cp=Object.entries(d.canais).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';
     const tc=cp==='Bilheteria'?'tag-bil':cp==='POS'?'tag-pos':'';
     const tr=document.createElement('tr');tr.className='vr';
-    tr.innerHTML=`<td><div class="exp-btn" id="evd-${idx}" onclick="toggleSub2('vd',${idx})">+</div></td><td style="font-weight:600">${nome}</td><td class="r val-g">${fmt(d.val)}</td><td class="r">${fmtN(d.qtd)}</td><td class="r">${fmt(tkt)}</td><td><span class="tag ${tc}">${cp}</span></td>`;
+    tr.innerHTML=`<td><div class="exp-btn" id="evd-${idx}" onclick="toggleSub2('vd',${idx})">+</div></td><td style="font-weight:600;overflow:hidden;text-overflow:ellipsis">${nome}</td><td class="r val-g">${fmt(d.val)}</td><td class="r">${fmtN(d.qtd)}</td><td><span class="tag ${tc}">${cp}</span></td>`;
     tb.appendChild(tr);
     const prods=Object.entries(d.prods).sort((a,b)=>b[1].val-a[1].val);
     const subTr=document.createElement('tr');subTr.className='sub-row';subTr.id=`svd-${idx}`;
-    subTr.innerHTML=`<td colspan="6" style="padding:0"><table style="width:100%;border-collapse:collapse;background:var(--gl)"><tr style="border-bottom:1px solid var(--bd)"><th style="padding:5px 5px 5px 36px;font-size:10px;font-weight:600;color:var(--mu2);text-align:left">Produto</th><th style="padding:5px;font-size:10px;text-align:right;font-weight:600;color:var(--mu2)">Vendas</th><th style="padding:5px;font-size:10px;text-align:right;font-weight:600;color:var(--mu2)">Qtd</th><th style="padding:5px;font-size:10px;text-align:right;font-weight:600;color:var(--mu2)">Ticket</th><th colspan="2" style="padding:5px;font-size:10px;text-align:left;font-weight:600;color:var(--mu2)">Canal</th></tr>${prods.map(([p,pd])=>{const tkt2=pd.qtd>0?pd.val/pd.qtd:0;const c2=Object.entries(pd.canais).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';const tc2=c2==='Bilheteria'?'tag-bil':c2==='POS'?'tag-pos':'';return`<tr><td style="padding:6px 5px 6px 36px;font-size:12px;color:var(--mu)">${p}</td><td style="text-align:right;padding:6px 5px;font-size:12px;color:var(--g);font-weight:600">${fmt(pd.val)}</td><td style="text-align:right;padding:6px 5px;font-size:12px">${fmtN(pd.qtd)}</td><td style="text-align:right;padding:6px 5px;font-size:12px">${fmt(tkt2)}</td><td colspan="2" style="padding:6px 5px"><span class="tag ${tc2}" style="font-size:10px">${c2}</span></td></tr>`;}).join('')}</table></td>`;
+    subTr.innerHTML=`<td colspan="5" style="padding:0"><table style="width:100%;border-collapse:collapse;background:var(--gl);table-layout:fixed"><tr style="border-bottom:1px solid var(--bd)"><th style="padding:4px 4px 4px 28px;font-size:9px;font-weight:600;color:var(--mu2);text-align:left">Produto</th><th style="padding:4px;font-size:9px;text-align:right;font-weight:600;color:var(--mu2);width:68px">Vendas</th><th style="padding:4px;font-size:9px;text-align:right;font-weight:600;color:var(--mu2);width:34px">Qtd</th><th style="padding:4px;font-size:9px;text-align:left;font-weight:600;color:var(--mu2);width:58px">Canal</th></tr>${prods.map(([p,pd])=>{const c2=Object.entries(pd.canais).sort((a,b)=>b[1]-a[1])[0]?.[0]||'—';const tc2=c2==='Bilheteria'?'tag-bil':c2==='POS'?'tag-pos':'';return`<tr><td style="padding:4px 4px 4px 28px;font-size:10px;color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p}</td><td style="text-align:right;padding:4px;font-size:10px;color:var(--g);font-weight:600;white-space:nowrap">${fmt(pd.val)}</td><td style="text-align:right;padding:4px;font-size:10px;white-space:nowrap">${fmtN(pd.qtd)}</td><td style="padding:4px"><span class="tag ${tc2}">${c2}</span></td></tr>`;}).join('')}</table></td>`;
     tb.appendChild(subTr);
   });
 }
