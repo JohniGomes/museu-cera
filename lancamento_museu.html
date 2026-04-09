@@ -186,7 +186,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .cdd-trigger svg { flex-shrink: 0; opacity: 0.4; transition: transform 0.2s; }
 .cdd.open .cdd-trigger svg { transform: rotate(180deg); opacity: 0.7; }
 
+.modal-overlay.open ~ * .cdd-panel,
+.modal-overlay.open + * .cdd-panel { display: none !important; }
+
 .cdd-panel {
+  display: none;
   position: fixed;
   background: var(--white);
   border: 1px solid var(--border);
@@ -195,7 +199,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   z-index: 999;
   max-height: 300px;
   overflow-y: auto;
-  display: none;
 }
 .cdd.open .cdd-panel { display: block; }
 
@@ -886,10 +889,16 @@ document.getElementById('m-nome').addEventListener('keydown', e => { if (e.key =
 // Abrir/fechar modal
 document.getElementById('btn-vend-open').addEventListener('click', function(e) {
   e.stopPropagation();
-  document.getElementById('cdd').classList.remove('open');
+  // Fechar dropdown completamente
+  const cdd = document.getElementById('cdd');
+  cdd.classList.remove('open');
+  document.getElementById('cdd-panel').style.display = 'none';
   renderLista();
   document.getElementById('modal').classList.add('open');
-  setTimeout(() => document.getElementById('m-nome').focus(), 100);
+  setTimeout(() => {
+    document.getElementById('cdd-panel').style.display = '';
+    document.getElementById('m-nome').focus();
+  }, 300);
 });
 
 document.getElementById('modal').addEventListener('click', function(e) {
