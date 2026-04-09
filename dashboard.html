@@ -9,19 +9,19 @@
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --green:  #1DC994;
-  --green2: #17a87c;
-  --green-l:#e8f9f3;
-  --bg:     #EDF2F7;
+  --green:  #127369;
+  --green2: #10403B;
+  --green-l:#e8f0ef;
+  --bg:     #f4f5f5;
   --white:  #FFFFFF;
-  --text:   #1a2332;
-  --muted:  #8a97a8;
-  --muted2: #b8c4cf;
-  --border: #e4eaf0;
-  --danger: #e05252;
-  --amber:  #f59e0b;
-  --blue:   #3b82f6;
-  --purple: #8b5cf6;
+  --text:   #10403B;
+  --muted:  #4C5958;
+  --muted2: #8AA6A3;
+  --border: #BFBFBF;
+  --danger: #c0392b;
+  --amber:  #8AA6A3;
+  --blue:   #127369;
+  --purple: #10403B;
 }
 body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-serif; min-height: 100vh; }
 
@@ -100,8 +100,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
 }
 .kpi-a1 { color: var(--muted); }
 .kpi-var { padding: 2px 6px; border-radius: 6px; font-weight: 600; }
-.kpi-var.up   { background: #dcfce7; color: #15803d; }
-.kpi-var.down { background: #fee2e2; color: #b91c1c; }
+.kpi-var.up   { background: #d6eae8; color: #10403B; }
+.kpi-var.down { background: #fde8e8; color: #c0392b; }
 .kpi-var.neu  { background: var(--bg); color: var(--muted); }
 
 /* ── SEÇÃO GRÁFICOS ── */
@@ -165,8 +165,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
   display: inline-block; padding: 2px 8px; border-radius: 10px;
   font-size: 11px; font-weight: 600;
 }
-.tag-bil { background: #dbeafe; color: #1d4ed8; }
-.tag-pos { background: #fef3c7; color: #b45309; }
+.tag-bil { background: #dde8e7; color: #127369; }
+.tag-pos { background: #e8f0ef; color: #4C5958; }
 
 /* ── EMPTY STATE ── */
 .empty { text-align: center; padding: 48px 20px; color: var(--muted); }
@@ -248,8 +248,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
   <!-- KPI CARDS -->
   <div class="kpi-grid">
     <div class="kpi-card">
-      <div class="kpi-icon" style="background:#dcfce7">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#15803d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      <div class="kpi-icon" style="background:#d6eae8">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#10403B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       </div>
       <div class="kpi-lbl">Vendas Totais</div>
       <div class="kpi-val" id="k-vendas">—</div>
@@ -259,8 +259,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
       </div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon" style="background:#dbeafe">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#1d4ed8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      <div class="kpi-icon" style="background:#dde8e7">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
       </div>
       <div class="kpi-lbl">Visitantes</div>
       <div class="kpi-val" id="k-visit">—</div>
@@ -270,8 +270,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
       </div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon" style="background:#fef3c7">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+      <div class="kpi-icon" style="background:#e8f0ef">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#4C5958" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
       </div>
       <div class="kpi-lbl">Ticket Médio</div>
       <div class="kpi-val" id="k-ticket">—</div>
@@ -281,8 +281,8 @@ body { background: var(--bg); color: var(--text); font-family: 'Rajdhani', sans-
       </div>
     </div>
     <div class="kpi-card">
-      <div class="kpi-icon" style="background:#ede9fe">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#6d28d9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+      <div class="kpi-icon" style="background:#dde8e7">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#10403B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
       </div>
       <div class="kpi-lbl">Ating. da Meta</div>
       <div class="kpi-val" id="k-meta">—</div>
@@ -349,7 +349,7 @@ const SHEET_ID  = "1YnzKPPFKNk-j1iYL9YGi2hnHFG1yClYAdGJ63iLXyGY";
 const ABA_GID   = "0";
 const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${ABA_GID}`;
 
-const CORES = ['#1DC994','#3b82f6','#f59e0b','#8b5cf6','#ef4444','#06b6d4','#84cc16','#f97316'];
+const CORES = ['#127369','#8AA6A3','#8AA6A3','#10403B','#8AA6A3','#127369','#4C5958','#10403B'];
 const fmt   = v => 'R$ ' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtN  = v => Number(v).toLocaleString('pt-BR');
 
@@ -612,7 +612,7 @@ function renderGraficos(registros, de, ate) {
     type: 'bar',
     data: {
       labels: topProds.map(([k]) => k.length > 28 ? k.slice(0,26)+'…' : k),
-      datasets: [{ data: topProds.map(([,v]) => v), backgroundColor: '#1DC99488', borderRadius: 4, borderSkipped: false }]
+      datasets: [{ data: topProds.map(([,v]) => v), backgroundColor: '#12736988', borderRadius: 4, borderSkipped: false }]
     },
     options: { indexAxis: 'y', ...optsBar(), plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => fmt(c.raw) } } } }
   });
@@ -633,8 +633,8 @@ function renderGraficos(registros, de, ate) {
     data: {
       labels: dias.map(d => { const [y,m,dd] = d.split('-'); return `${dd}/${m}`; }),
       datasets: [
-        { label: 'Vendas', data: dias.map(d => diasMap[d].vendas), backgroundColor: '#1DC99466', borderRadius: 4, borderSkipped: false, order: 2 },
-        { label: 'Meta', data: dias.map(d => diasMap[d].meta), type: 'line', borderColor: '#f59e0b', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#f59e0b', tension: 0.3, order: 1 }
+        { label: 'Vendas', data: dias.map(d => diasMap[d].vendas), backgroundColor: '#12736966', borderRadius: 4, borderSkipped: false, order: 2 },
+        { label: 'Meta', data: dias.map(d => diasMap[d].meta), type: 'line', borderColor: '#8AA6A3', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 3, pointBackgroundColor: '#8AA6A3', tension: 0.3, order: 1 }
       ]
     },
     options: {
