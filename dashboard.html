@@ -25,11 +25,13 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .hdr-sub{font-size:11px;color:var(--mu2);margin-top:1px}
 
 /* FILTROS */
-.flt{background:var(--white);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.flt-lbl{font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.06em}
-.flt select,.flt input[type=date]{background:var(--bg);border:1.5px solid var(--bd);border-radius:8px;padding:6px 10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:500;color:var(--text);outline:none}
+.flt{background:var(--white);border-bottom:1px solid var(--bd);padding:10px 20px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
+.flt-grp{display:flex;align-items:center;gap:6px}
+.flt-lbl{font-size:10px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+.flt select,.flt input[type=date]{background:var(--bg);border:1.5px solid var(--bd);border-radius:8px;padding:6px 10px;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:500;color:var(--text);outline:none;max-width:160px}
 .flt select:focus,.flt input:focus{border-color:var(--g)}
-.btn-ref{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--g);color:#fff;border:none;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;cursor:pointer;margin-left:auto}
+.flt-sep{width:1px;height:20px;background:var(--bd);flex-shrink:0}
+.btn-ref{display:flex;align-items:center;gap:6px;padding:7px 14px;background:var(--g);color:#fff;border:none;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;cursor:pointer}
 .btn-ref:hover{background:var(--g2)}
 .loading-bar{height:3px;background:var(--g);position:fixed;top:0;left:0;z-index:999;transition:width .3s;width:0}
 
@@ -73,6 +75,8 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .tbl td{padding:8px 8px;border-bottom:1px solid var(--bd);font-size:11px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tbl tr:last-child td{border-bottom:none}
 .tbl tr.vr:hover>td{background:var(--gl);cursor:pointer}
+/* exp-btn: overflow visible para não ser cortado pela célula */
+.tbl td:first-child{overflow:visible}
 .exp-btn{width:20px;height:20px;border-radius:5px;background:var(--bg);border:1.5px solid var(--bd);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;font-weight:600;color:var(--mu);user-select:none;transition:all .15s;flex-shrink:0}
 .exp-btn.op{background:var(--g);border-color:var(--g);color:#fff}
 .sub-row{display:none}
@@ -84,12 +88,30 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 
 /* GRID TABELAS 3+3 */
 .tbl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px}
-.tbl-grid .card{margin-bottom:0;overflow:hidden}
-@media(max-width:1000px){.tbl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:600px){.tbl-grid{grid-template-columns:minmax(0,1fr)}}
+.tbl-grid .card{margin-bottom:0;overflow:visible}
 
-@media(max-width:900px){.kpi-grid{grid-template-columns:repeat(3,1fr)}.g3{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.kpi-grid{grid-template-columns:1fr 1fr}.g2,.g3{grid-template-columns:1fr}.page{padding:14px 10px 60px}}
+/* RANKING — número visível */
+.rank-num{font-weight:700;color:var(--mu);font-size:12px;overflow:visible;display:inline-block}
+
+/* MOBILE */
+@media(max-width:1000px){.tbl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:900px){.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){
+  /* Filtros mobile: grupo a grupo em linha */
+  .flt{justify-content:flex-start;padding:8px 12px;gap:6px}
+  .flt-grp{flex:1 1 calc(50% - 6px);min-width:0}
+  .flt-grp select,.flt-grp input{width:100%;max-width:100%;font-size:12px}
+  .flt-sep{display:none}
+  .btn-ref{width:100%;justify-content:center;margin-top:2px}
+  /* KPI 2x2 em mobile — ocultar Conversão */
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .kpi-conv-mobile{display:none}
+  /* Meta + Conversão juntos num card único */
+  .kpi-meta-mobile{grid-column:1 / -1}
+  .g2,.g3{grid-template-columns:1fr}
+  .tbl-grid{grid-template-columns:minmax(0,1fr)}
+  .page{padding:14px 10px 60px}
+}
 </style>
 </head>
 <body>
@@ -107,45 +129,58 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 </div>
 
 <div class="flt">
-  <span class="flt-lbl">Período</span>
-  <select id="f-per" onchange="onPerChange()">
-    <option value="mes_atual">Mês atual</option>
-    <option value="mes_ant">Mês anterior</option>
-    <option value="u30">Últimos 30 dias</option>
-    <option value="u90">Últimos 90 dias</option>
-    <option value="ano">Ano atual</option>
-    <option value="custom">Personalizado</option>
-  </select>
-  <div id="custom-dts" style="display:none;display:flex;gap:6px;align-items:center">
+  <div class="flt-grp">
+    <span class="flt-lbl">Período</span>
+    <select id="f-per" onchange="onPerChange()">
+      <option value="mes_atual">Mês atual</option>
+      <option value="mes_ant">Mês anterior</option>
+      <option value="u30">Últimos 30 dias</option>
+      <option value="u90">Últimos 90 dias</option>
+      <option value="ano">Ano atual</option>
+      <option value="custom">Personalizado</option>
+    </select>
+  </div>
+  <div id="custom-dts" style="display:none;align-items:center;gap:6px" class="flt-grp">
     <input type="date" id="f-de" onchange="aplicar()">
     <span style="font-size:11px;color:var(--mu)">até</span>
     <input type="date" id="f-ate" onchange="aplicar()">
   </div>
-  <span class="flt-lbl">Vendedor</span>
-  <select id="f-vend" onchange="aplicar()"><option value="">Todos</option></select>
-  <span class="flt-lbl">Canal</span>
-  <select id="f-canal" onchange="aplicar()">
-    <option value="">Todos</option><option value="Bilheteria">Bilheteria</option><option value="POS">POS</option>
-  </select>
-  <span class="flt-lbl">Categoria</span>
-  <select id="f-cat" onchange="onCatChange()">
-    <option value="">Todas</option>
-    <option value="avulso">Avulso</option>
-    <option value="combo_duplo">Combo Duplo</option>
-    <option value="combo_triplo">Combo Triplo</option>
-    <option value="exp_completa">Exp. Completa</option>
-    <option value="complementos">Complementos</option>
-  </select>
-  <span class="flt-lbl">Atração / Produto</span>
-  <select id="f-atr" onchange="aplicar()">
-    <option value="">Todas</option>
-  </select>
-  <span class="flt-lbl">Tipo Museu</span>
-  <select id="f-tipo" onchange="aplicar()">
-    <option value="">Todos</option>
-    <option value="museu_venda">Só Museu</option>
-    <option value="todas_atracoes">Todas as Atrações</option>
-  </select>
+  <div class="flt-sep"></div>
+  <div class="flt-grp">
+    <span class="flt-lbl">Vendedor</span>
+    <select id="f-vend" onchange="aplicar()"><option value="">Todos</option></select>
+  </div>
+  <div class="flt-grp">
+    <span class="flt-lbl">Canal</span>
+    <select id="f-canal" onchange="aplicar()">
+      <option value="">Todos</option><option value="Bilheteria">Bilheteria</option><option value="POS">POS</option>
+    </select>
+  </div>
+  <div class="flt-sep"></div>
+  <div class="flt-grp">
+    <span class="flt-lbl">Categoria</span>
+    <select id="f-cat" onchange="onCatChange()">
+      <option value="">Todas</option>
+      <option value="avulso">Avulso</option>
+      <option value="combo_duplo">Combo Duplo</option>
+      <option value="combo_triplo">Combo Triplo</option>
+      <option value="exp_completa">Exp. Completa</option>
+      <option value="complementos">Complementos</option>
+    </select>
+  </div>
+  <div class="flt-grp">
+    <span class="flt-lbl">Atração / Produto</span>
+    <select id="f-atr" onchange="aplicar()"><option value="">Todas</option></select>
+  </div>
+  <div class="flt-grp">
+    <span class="flt-lbl">Tipo Museu</span>
+    <select id="f-tipo" onchange="aplicar()">
+      <option value="">Todos</option>
+      <option value="museu_venda">Só Museu</option>
+      <option value="todas_atracoes">Todas as Atrações</option>
+    </select>
+  </div>
+  <div class="flt-sep"></div>
   <button class="btn-ref" onclick="carregar()">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
     Atualizar
@@ -159,8 +194,8 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="kpi"><div class="kpi-ico" style="background:#d6eae8"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="kpi-lbl">Vendas Totais</div><div class="kpi-val" id="k-vend">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-vend-a1"></span><span class="kpi-var ne" id="k-vend-v"></span></div></div>
   <div class="kpi"><div class="kpi-ico" style="background:#dde8e7"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="kpi-lbl">Ingressos Vendidos</div><div class="kpi-val" id="k-ing">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-ing-a1"></span><span class="kpi-var ne" id="k-ing-v"></span></div></div>
   <div class="kpi"><div class="kpi-ico" style="background:#e8f0ef"><svg viewBox="0 0 24 24" fill="none" stroke="#4C5958" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/></svg></div><div class="kpi-lbl">Ticket Médio</div><div class="kpi-val" id="k-tkt">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-tkt-a1"></span><span class="kpi-var ne" id="k-tkt-v"></span></div></div>
-  <div class="kpi"><div class="kpi-ico" style="background:#dde8e7"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="kpi-lbl">Ating. da Meta</div><div class="kpi-val" id="k-meta">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-meta-a1"></span><span class="kpi-var ne" id="k-meta-v"></span></div></div>
-  <div class="kpi"><div class="kpi-ico" style="background:#e8f0ef"><svg viewBox="0 0 24 24" fill="none" stroke="#4C5958" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="kpi-lbl">Conversão Museu</div><div class="kpi-val" id="k-conv">—</div><div class="kpi-cmp"><span class="kpi-a1" style="color:var(--mu2);font-size:11px" id="k-conv-info"></span></div></div>
+  <div class="kpi"><div class="kpi-ico" style="background:#dde8e7"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="kpi-lbl">Ating. da Meta</div><div class="kpi-val" id="k-meta">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-meta-a1"></span><span class="kpi-var ne" id="k-meta-v"></span><span class="kpi-a1" id="k-conv-mobile" style="display:none"></span></div></div>
+  <div class="kpi kpi-conv-mobile"><div class="kpi-ico" style="background:#e8f0ef"><svg viewBox="0 0 24 24" fill="none" stroke="#4C5958" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="kpi-lbl">Conversão Museu</div><div class="kpi-val" id="k-conv">—</div><div class="kpi-cmp"><span class="kpi-a1" style="color:var(--mu2);font-size:11px" id="k-conv-info"></span></div></div>
 </div>
 
 <!-- ── GRÁFICOS LINHA 1 ── -->
@@ -222,8 +257,8 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="card">
     <div class="sec-title">Ranking — Base Museu</div>
     <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col style="width:28px"><col><col style="width:56px"><col style="width:48px"></colgroup>
-      <thead><tr><th>#</th><th>Vendedor</th><th class="r">Ing.</th><th class="r">Part.%</th></tr></thead>
+      <colgroup><col style="width:32px"><col><col style="width:56px"><col style="width:48px"></colgroup>
+      <thead><tr><th style="overflow:visible">#</th><th>Vendedor</th><th class="r">Ing.</th><th class="r">Part.%</th></tr></thead>
       <tbody id="tbl-rank-body"></tbody>
     </table></div>
   </div>
@@ -465,11 +500,17 @@ function renderKPIs(at, a1) {
   const totalPax  = Object.values(diasPax).reduce((a,b) => a + b, 0);
   const ingMuseu  = at.filter(r => TEM_MUSEU.includes(r['Produto'])).reduce((a,r) => a + (Number(r['Quantidade']) || 0), 0);
   if (totalPax > 0) {
-    setEl('k-conv', ((ingMuseu / totalPax) * 100).toFixed(1) + '%');
+    const convVal = ((ingMuseu / totalPax) * 100).toFixed(1) + '%';
+    setEl('k-conv', convVal);
     setEl('k-conv-info', fmtN(ingMuseu) + ' ing ÷ ' + fmtN(totalPax) + ' PAX');
+    // Mobile: mostrar conversão dentro do card de meta
+    const mob = document.getElementById('k-conv-mobile');
+    if (mob) { mob.style.display = ''; mob.textContent = 'Conv: ' + convVal; }
   } else {
     setEl('k-conv', '—');
     setEl('k-conv-info', 'Lance PAX no formulário');
+    const mob = document.getElementById('k-conv-mobile');
+    if (mob) mob.style.display = 'none';
   }
 }
 
@@ -590,7 +631,7 @@ function renderRankingMuseu(at){
   const tb=document.getElementById('tbl-rank-body');tb.innerHTML='';
   Object.entries(por).sort((a,b)=>b[1].ing-a[1].ing).forEach(([v,d],i)=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600;color:var(--mu2)">#${i+1}</td><td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.ing)}</td><td class="r">${pct(d.ing,totalIng)}</td>`;
+    tr.innerHTML=`<td style="overflow:visible"><span class="rank-num">#${i+1}</span></td><td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.ing)}</td><td class="r">${pct(d.ing,totalIng)}</td>`;
     tb.appendChild(tr);
   });
 }
