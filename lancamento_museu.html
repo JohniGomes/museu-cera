@@ -796,6 +796,7 @@ document.getElementById('cdd-panel').addEventListener('click', function(e) {
 
 // Fechar ao clicar fora
 document.addEventListener('click', function(e) {
+  if (document.getElementById('modal').classList.contains('open')) return;
   if (!document.getElementById('cdd').contains(e.target))
     document.getElementById('cdd').classList.remove('open');
 });
@@ -883,7 +884,8 @@ document.getElementById('btn-add-vend').addEventListener('click', addVendedor);
 document.getElementById('m-nome').addEventListener('keydown', e => { if (e.key === 'Enter') addVendedor(); });
 
 // Abrir/fechar modal
-document.getElementById('btn-vend-open').addEventListener('click', function() {
+document.getElementById('btn-vend-open').addEventListener('click', function(e) {
+  e.stopPropagation();
   document.getElementById('cdd').classList.remove('open');
   renderLista();
   document.getElementById('modal').classList.add('open');
