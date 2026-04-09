@@ -336,49 +336,65 @@ function aplicar(){
 }
 
 // ── KPIs ──
-function kpiSet(id,val,idA1,valA1,idV,varPct){
-  document.getElementById(id).textContent=val;
-  if(valA1!==null){
-    document.getElementById(idA1).textContent='A-1: '+valA1;
-    if(varPct!==null){
-      const cls=varPct>=0?'up':'dn';
-      const el=document.getElementById(idV);
-      el.className='kpi-var '+cls;
-      el.textContent=(varPct>=0?'+':'')+varPct.toFixed(1)+'%';
+function setEl(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+function kpiSet(id, val, idA1, valA1, idV, varPct) {
+  setEl(id, val);
+  if (idA1 && valA1 !== null && valA1 !== undefined) {
+    setEl(idA1, 'A-1: ' + valA1);
+  }
+  if (idV && varPct !== null && varPct !== undefined) {
+    const el = document.getElementById(idV);
+    if (el) {
+      const cls = varPct >= 0 ? 'up' : 'dn';
+      el.className = 'kpi-var ' + cls;
+      el.textContent = (varPct >= 0 ? '+' : '') + varPct.toFixed(1) + '%';
     }
   }
 }
-function renderKPIs(at,a1){
-  const v=s=>s.reduce((a,r)=>a+(Number(r['Total'])||0),0);
-  const q=s=>s.reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
-  const vAt=v(at),vA1=v(a1),qAt=q(at),qA1=q(a1);
-  const tAt=qAt>0?vAt/qAt:0,tA1=qA1>0?vA1/qA1:0;
-  const metas=at.map(r=>Number(r['Meta do Dia'])||0).filter(m=>m>0);
-  const metaM=metas.length?metas.reduce((a,b)=>a+b,0)/metas.length:0;
-  const aAt=metaM>0?(vAt/metaM)*100:null;
-  const mA1=a1.map(r=>Number(r['Meta do Dia'])||0).filter(m=>m>0);
-  const metaA1=mA1.length?mA1.reduce((a,b)=>a+b,0)/mA1.length:0;
-  const aA1=metaA1>0?(vA1/metaA1)*100:null;
+function renderKPIs(at, a1) {
+  const v = s => s.reduce((a,r) => a + (Number(r['Total']) || 0), 0);
+  const q = s => s.reduce((a,r) => a + (Number(r['Quantidade']) || 0), 0);
+  const vAt = v(at), vA1 = v(a1), qAt = q(at), qA1 = q(a1);
+  const tAt = qAt > 0 ? vAt / qAt : 0;
+  const tA1 = qA1 > 0 ? vA1 / qA1 : 0;
 
-  kpiSet('k-vend',fmt(vAt),'k-vend-a1',vA1>0?fmt(vA1):null,'k-vend-v',vA1>0?((vAt-vA1)/vA1)*100:null);
-  kpiSet('k-ing',fmtN(qAt),'k-ing-a1',qA1>0?fmtN(qA1):null,'k-ing-v',qA1>0?((qAt-qA1)/qA1)*100:null);
-  kpiSet('k-tkt',fmt(tAt),'k-tkt-a1',tA1>0?fmt(tA1):null,'k-tkt-v',tA1>0?((tAt-tA1)/tA1)*100:null);
-  document.getElementById('k-meta').textContent=aAt!==null?aAt.toFixed(1)+'%':'—';
-  if(aA1!==null&&aAt!==null){kpiSet('k-meta','',null,'k-meta-a1',null,'k-meta-v',null);document.getElementById('k-meta').textContent=aAt.toFixed(1)+'%';document.getElementById('k-meta-a1').textContent='A-1: '+aA1.toFixed(1)+'%';const cls=(aAt-aA1)>=0?'up':'dn';document.getElementById('k-meta-v').className='kpi-var '+cls;document.getElementById('k-meta-v').textContent=((aAt-aA1)>=0?'+':'')+((aAt-aA1).toFixed(1))+'%';}
+  kpiSet('k-vend', fmt(vAt),  'k-vend-a1', vA1 > 0 ? fmt(vA1)   : null, 'k-vend-v', vA1 > 0 ? ((vAt - vA1) / vA1) * 100 : null);
+  kpiSet('k-ing',  fmtN(qAt), 'k-ing-a1',  qA1 > 0 ? fmtN(qA1)  : null, 'k-ing-v',  qA1 > 0 ? ((qAt - qA1) / qA1) * 100 : null);
+  kpiSet('k-tkt',  fmt(tAt),  'k-tkt-a1',  tA1 > 0 ? fmt(tA1)   : null, 'k-tkt-v',  tA1 > 0 ? ((tAt - tA1) / tA1) * 100 : null);
+
+  // Meta
+  const metas = at.map(r => Number(r['Meta do Dia']) || 0).filter(m => m > 0);
+  const metaM = metas.length ? metas.reduce((a,b) => a+b, 0) / metas.length : 0;
+  const aAt   = metaM > 0 ? (vAt / metaM) * 100 : null;
+  const mA1   = a1.map(r => Number(r['Meta do Dia']) || 0).filter(m => m > 0);
+  const metaA1 = mA1.length ? mA1.reduce((a,b) => a+b, 0) / mA1.length : 0;
+  const aA1    = metaA1 > 0 ? (vA1 / metaA1) * 100 : null;
+  setEl('k-meta', aAt !== null ? aAt.toFixed(1) + '%' : '—');
+  if (aAt !== null && aA1 !== null) {
+    setEl('k-meta-a1', 'A-1: ' + aA1.toFixed(1) + '%');
+    const diff = aAt - aA1;
+    const el = document.getElementById('k-meta-v');
+    if (el) { el.className = 'kpi-var ' + (diff >= 0 ? 'up' : 'dn'); el.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '%'; }
+  }
 
   // Conversão Museu
-  // PAX: pegar o maior PAX registrado por dia e somar
-  const diasPax={};
-  at.forEach(r=>{const d=r._data.toISOString().split('T')[0];const p=Number(r['PAX Aquário'])||0;if(p>diasPax[d])diasPax[d]=p;});
-  const totalPax=Object.values(diasPax).reduce((a,b)=>a+b,0);
-  const ingMuseu=at.filter(r=>TEM_MUSEU.includes(r['Produto'])).reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
-  if(totalPax>0){
-    const conv=(ingMuseu/totalPax)*100;
-    document.getElementById('k-conv').textContent=conv.toFixed(1)+'%';
-    document.getElementById('k-conv-info').textContent=fmtN(ingMuseu)+' ing ÷ '+fmtN(totalPax)+' PAX';
+  const diasPax = {};
+  at.forEach(r => {
+    const d = r._data.toISOString().split('T')[0];
+    const p = Number(r['PAX Aquário']) || 0;
+    if (!diasPax[d] || p > diasPax[d]) diasPax[d] = p;
+  });
+  const totalPax  = Object.values(diasPax).reduce((a,b) => a + b, 0);
+  const ingMuseu  = at.filter(r => TEM_MUSEU.includes(r['Produto'])).reduce((a,r) => a + (Number(r['Quantidade']) || 0), 0);
+  if (totalPax > 0) {
+    setEl('k-conv', ((ingMuseu / totalPax) * 100).toFixed(1) + '%');
+    setEl('k-conv-info', fmtN(ingMuseu) + ' ing ÷ ' + fmtN(totalPax) + ' PAX');
   } else {
-    document.getElementById('k-conv').textContent='—';
-    document.getElementById('k-conv-info').textContent='Lance PAX Aquário no formulário';
+    setEl('k-conv', '—');
+    setEl('k-conv-info', 'Lance PAX no formulário');
   }
 }
 
