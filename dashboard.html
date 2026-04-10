@@ -229,15 +229,15 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="card">
     <div class="sec-title">Por Atração</div>
     <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col><col style="width:60px"><col style="width:80px"><col style="width:48px"></colgroup>
-      <thead><tr><th>Atração</th><th class="r">Ing.</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead>
+      <colgroup><col><col style="width:80px"><col style="width:48px"></colgroup>
+      <thead><tr><th>Atração</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead>
       <tbody id="tbl-atr-body"></tbody>
     </table></div>
   </div>
   <div class="card">
     <div class="sec-title">Atração por Vendedor</div>
     <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col><col style="width:44px"><col style="width:44px"><col style="width:44px"><col style="width:48px"></colgroup>
+      <colgroup><col><col style="width:52px"><col style="width:52px"><col style="width:52px"><col style="width:48px"></colgroup>
       <thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Part.%</th></tr></thead>
       <tbody id="tbl-atr-vend-body"></tbody>
     </table></div>
@@ -608,34 +608,41 @@ function renderTipoProduto(at,tipo){
 
 // ── ANÁLISE ATRAÇÃO ──
 function renderAtracao(at){
-  const atr={Museu:{ing:0,val:0},GEX:{ing:0,val:0},MAR:{ing:0,val:0}};
+  const atr={Museu:{val:0},GEX:{val:0},MAR:{val:0}};
   at.forEach(r=>{
-    if(TEM_MUSEU.includes(r['Produto'])){atr.Museu.ing+=Number(r['Quantidade'])||0;atr.Museu.val+=parcelaAtr(r,'museu');}
-    if(TEM_GEX.includes(r['Produto']))  {atr.GEX.ing+=Number(r['Quantidade'])||0;atr.GEX.val+=parcelaAtr(r,'gex');}
-    if(TEM_MAR.includes(r['Produto']))  {atr.MAR.ing+=Number(r['Quantidade'])||0;atr.MAR.val+=parcelaAtr(r,'mar');}
+    if(TEM_MUSEU.includes(r['Produto'])) atr.Museu.val += parcelaAtr(r,'museu');
+    if(TEM_GEX.includes(r['Produto']))   atr.GEX.val   += parcelaAtr(r,'gex');
+    if(TEM_MAR.includes(r['Produto']))   atr.MAR.val   += parcelaAtr(r,'mar');
   });
-  const totalIng=atr.Museu.ing+atr.GEX.ing+atr.MAR.ing;
-  const tb=document.getElementById('tbl-atr-body');tb.innerHTML='';
-  Object.entries(atr).forEach(([n,d])=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600">${n}</td><td class="r">${fmtN(d.ing)}</td><td class="r val-g">${fmt(d.val)}</td><td class="r">${pct(d.ing,totalIng)}</td>`;
+  const totalVal = atr.Museu.val + atr.GEX.val + atr.MAR.val;
+  const tb = document.getElementById('tbl-atr-body'); tb.innerHTML='';
+  Object.entries(atr).forEach(([n,d]) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td style="font-weight:600">${n}</td><td class="r val-g">${fmt(d.val)}</td><td class="r">${pct(d.val,totalVal)}</td>`;
     tb.appendChild(tr);
   });
-  const tot=document.createElement('tr');
-  tot.innerHTML=`<td style="font-weight:600;border-top:2px solid var(--bd)">Total</td><td class="r" style="border-top:2px solid var(--bd)">${fmtN(totalIng)}</td><td class="r val-g" style="border-top:2px solid var(--bd)">—</td><td class="r" style="border-top:2px solid var(--bd)">100%</td>`;
+  // Linha de total
+  const tot = document.createElement('tr');
+  tot.innerHTML = `<td style="font-weight:600;border-top:2px solid var(--bd)">Total</td><td class="r val-g" style="border-top:2px solid var(--bd)">${fmt(totalVal)}</td><td class="r" style="border-top:2px solid var(--bd)">100%</td>`;
   tb.appendChild(tot);
 }
 
 // ── ATRAÇÃO POR VENDEDOR ──
+// Colunas: Vendedor | Museu (R$) | GEX (R$) | MAR (R$) | Part.% Museu sobre total Museu do time
 function renderAtracaoVend(at){
   const por={};
-  at.forEach(r=>{const v=r['Vendedor']||'S/N';if(!por[v])por[v]={museu:0,gex:0,mar:0};const p=r['Produto'];const q=Number(r['Quantidade'])||0;if(TEM_MUSEU.includes(p))por[v].museu+=q;if(TEM_GEX.includes(p))por[v].gex+=q;if(TEM_MAR.includes(p))por[v].mar+=q;});
-  const totalMuseu=Object.values(por).reduce((a,b)=>a+b.museu,0);
-  const tb=document.getElementById('tbl-atr-vend-body');tb.innerHTML='';
+  at.forEach(r=>{
+    const v=r['Vendedor']||'S/N';
+    if(!por[v])por[v]={museu:0,gex:0,mar:0};
+    por[v].museu += parcelaAtr(r,'museu');
+    por[v].gex   += parcelaAtr(r,'gex');
+    por[v].mar   += parcelaAtr(r,'mar');
+  });
+  const totalMuseuTime = Object.values(por).reduce((a,b)=>a+b.museu,0);
+  const tb = document.getElementById('tbl-atr-vend-body'); tb.innerHTML='';
   Object.entries(por).sort((a,b)=>b[1].museu-a[1].museu).forEach(([v,d])=>{
-    const tot=d.museu+d.gex+d.mar;
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.museu)}</td><td class="r">${fmtN(d.gex)}</td><td class="r">${fmtN(d.mar)}</td><td class="r">${pct(d.museu,totalMuseu)}</td>`;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td style="font-weight:600">${v}</td><td class="r val-g">${fmt(d.museu)}</td><td class="r">${fmt(d.gex)}</td><td class="r">${fmt(d.mar)}</td><td class="r">${pct(d.museu,totalMuseuTime)}</td>`;
     tb.appendChild(tr);
   });
 }
