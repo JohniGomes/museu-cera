@@ -753,21 +753,21 @@ function renderCharts(at,de,ate,tipo){
       labels:dias.map(d=>{const[,m,dd]=d.split('-');return`${dd}/${m}`;}),
       datasets:[
         {label:'Ano Atual',data:dias.map(d=>dmA0[d]||0),backgroundColor:CORES[0]+'cc',borderRadius:3,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:9,weight:'600'},
+          datalabels:{anchor:'end',align:'center',textAlign:'center',color:'#10403B',font:{family:'Rajdhani',size:9,weight:'600'},
             formatter:(v,ctx)=>{
               if(!v) return '';
               const d=dias[ctx.dataIndex];
               const ing=dqA0[d]||0;
               return [fmt(v), ing+' ing'];
-            },rotation:0}},
+            },offset:0}},
         {label:'Ano Anterior',data:dias.map(d=>dmA1[d]||0),backgroundColor:CORES[1]+'99',borderRadius:3,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:9,weight:'600'},
+          datalabels:{anchor:'end',align:'center',textAlign:'center',color:'#4C5958',font:{family:'Rajdhani',size:9,weight:'600'},
             formatter:(v,ctx)=>{
               if(!v) return '';
               const d=dias[ctx.dataIndex];
               const ing=dqA1[d]||0;
               return [fmt(v), ing+' ing'];
-            },rotation:0}}
+            },offset:0}}
       ]
     },
     options:{
