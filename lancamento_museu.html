@@ -449,6 +449,28 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     </div>
   </div>
 
+  <!-- Card PAX do dia — topo -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-section-title">PAX do dia</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr">
+      <div style="padding:12px 20px;border-right:1px solid var(--border)">
+        <div class="val-lbl" style="margin-bottom:4px">Aquário</div>
+        <input type="number" id="f-pax" placeholder="350" min="0"
+          style="width:100%;background:none;border:none;outline:none;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;color:var(--text)">
+      </div>
+      <div style="padding:12px 20px;border-right:1px solid var(--border)">
+        <div class="val-lbl" style="margin-bottom:4px">GEX</div>
+        <input type="number" id="f-pax-gex" placeholder="120" min="0"
+          style="width:100%;background:none;border:none;outline:none;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;color:var(--text)">
+      </div>
+      <div style="padding:12px 20px">
+        <div class="val-lbl" style="margin-bottom:4px">MAR</div>
+        <input type="number" id="f-pax-mar" placeholder="80" min="0"
+          style="width:100%;background:none;border:none;outline:none;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:600;color:var(--text)">
+      </div>
+    </div>
+  </div>
+
   <!-- Card -->
   <div class="card">
     <div class="card-section-title">Dados da venda</div>
@@ -619,40 +641,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
             <label class="rpill"><input type="radio" name="canal" value="POS"><span>POS</span></label>
           </div>
         </div>
-      </div>
-    </div>
-
-    <!-- DIVISOR META -->
-    <div class="sec-sep" style="margin-top:8px">
-      <div class="sec-sep-line"></div>
-      <div class="sec-sep-txt">Referência do dia</div>
-      <div class="sec-sep-line"></div>
-    </div>
-
-    <!-- PAX AQUÁRIO -->
-    <div class="field">
-      <div class="field-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-          <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-        </svg>
-      </div>
-      <div class="field-body">
-        <div class="field-lbl">PAX Aquário<small> · visitantes do dia</small></div>
-        <div class="field-ctrl"><input type="number" id="f-pax" placeholder="Ex: 350" min="0"></div>
-      </div>
-    </div>
-
-    <!-- META -->
-    <div class="field">
-      <div class="field-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
-        </svg>
-      </div>
-      <div class="field-body">
-        <div class="field-lbl">Meta do dia</div>
-        <div class="field-ctrl"><input type="number" id="f-meta" placeholder="Ex: 5000" min="0"></div>
       </div>
     </div>
 
@@ -961,8 +949,59 @@ function addVendedor() {
 document.getElementById('m-nome').addEventListener('keydown', e => { if (e.key === 'Enter') addVendedor(); });
 
 // ── Integração Google Sheets ──
-// Após publicar o Apps Script, cole a URL do Web App aqui:
+const SHEET_ID        = "1YnzKPPFKNk-j1iYL9YGi2hnHFG1yClYAdGJ63iLXyGY";
+const PRECOS_GID      = "412546681";
 const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwRlsQBdwLgNmcOxIGq-qPLpPMztVGDfPlYj62mw_hmxA1G5MPjsC9Mut2PAuF0vM3i6g/exec";
+
+// Carrega preços do Sheets e atualiza PRECOS + dropdown de produtos
+async function carregarPrecos() {
+  if (PRECOS_GID === 'COLE_O_GID_DA_ABA_PRECOS') return;
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${PRECOS_GID}`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const txt = await res.text();
+    const linhas = txt.trim().split('\n');
+    const hdrs = linhas[0].split(',').map(h => h.replace(/"/g,'').trim());
+    const novos = {};
+    linhas.slice(1).forEach(linha => {
+      const vals = linha.split(',').map(v => v.replace(/"/g,'').trim());
+      const obj  = {}; hdrs.forEach((h,i) => obj[h] = vals[i] || '');
+      const prod = obj['Produto'] || obj['produto'] || '';
+      if (!prod) return;
+      const aqua  = Number(obj['Aqua']  || obj['AQUA']  || 0);
+      const museu = Number(obj['Museu'] || obj['MUSEU'] || 0);
+      const gex   = Number(obj['GEX']   || obj['gex']   || 0);
+      const mar   = Number(obj['MAR']   || obj['mar']   || 0);
+      const total = Number(obj['Total'] || obj['TOTAL'] || (aqua+museu+gex+mar));
+      const cat   = obj['Categoria'] || obj['categoria'] || '';
+      PRECOS[prod] = { aqua, museu, gex, mar, total };
+      novos[prod]  = { total, cat };
+    });
+    // Atualizar museuVal derivado
+    Object.entries(PRECOS).forEach(([k,v]) => museuVal[k] = v.museu);
+    // Reconstruir produtosPorCat com os novos produtos
+    Object.entries(novos).forEach(([prod, {total, cat}]) => {
+      const catKey = cat.toLowerCase().replace(/ /g,'_') || 'avulso';
+      if (!produtosPorCat[catKey]) produtosPorCat[catKey] = [];
+      const label = `${prod} · R$ ${total}`;
+      const val   = `${prod}|${total}`;
+      const existe = produtosPorCat[catKey].some(([,v]) => v.startsWith(prod+'|'));
+      if (!existe) produtosPorCat[catKey].push([label, val]);
+      // Atualizar label se já existe com preço diferente
+      else {
+        const idx = produtosPorCat[catKey].findIndex(([,v]) => v.startsWith(prod+'|'));
+        if (idx >= 0) produtosPorCat[catKey][idx] = [label, val];
+      }
+    });
+    console.log('Preços carregados do Sheets:', Object.keys(novos).length, 'produtos');
+  } catch(e) {
+    console.warn('Preços não carregados do Sheets, usando tabela fixa.', e.message);
+  }
+}
+
+// Inicializar: carregar preços e renderizar
+carregarPrecos();
 
 // ── Salvar ──
 async function salvar() {
@@ -971,8 +1010,9 @@ async function salvar() {
   const produto  = document.getElementById('f-produto').value;
   const qtd      = parseInt(document.getElementById('f-qtd').value) || 1;
   const canal    = document.querySelector('input[name="canal"]:checked').value;
-  const meta     = document.getElementById('f-meta').value;
   const pax      = document.getElementById('f-pax').value;
+  const paxGex   = document.getElementById('f-pax-gex').value;
+  const paxMar   = document.getElementById('f-pax-mar').value;
   const catEl    = document.querySelector('input[name="cat"]:checked');
   const categoria = catEl ? catEl.value : '';
 
@@ -991,8 +1031,9 @@ async function salvar() {
     quantidade: qtd,
     total: Number(preco) * qtd,
     canal,
-    pax: pax ? Number(pax) : null,
-    meta: meta ? Number(meta) : null,
+    pax:    pax    ? Number(pax)    : null,
+    paxGex: paxGex ? Number(paxGex) : null,
+    paxMar: paxMar ? Number(paxMar) : null,
     ts: new Date().toISOString()
   };
 
@@ -1041,9 +1082,10 @@ function limpar() {
   document.querySelectorAll('.cdd-opt').forEach(o => o.classList.remove('sel'));
   document.querySelectorAll('input[name="cat"]').forEach(r => r.checked = false);
   document.getElementById('cdd-panel').innerHTML = '';
-  document.getElementById('f-qtd').value  = 1;
-  document.getElementById('f-pax').value  = '';
-  document.getElementById('f-meta').value = '';
+  document.getElementById('f-qtd').value   = 1;
+  document.getElementById('f-pax').value    = '';
+  document.getElementById('f-pax-gex').value = '';
+  document.getElementById('f-pax-mar').value = '';
   document.querySelector('input[name="canal"][value="Bilheteria"]').checked = true;
   document.getElementById('row-badge').style.display = 'none';
   document.getElementById('row-vals').style.display  = 'none';
