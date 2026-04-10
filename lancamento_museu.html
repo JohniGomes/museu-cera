@@ -569,12 +569,24 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     <!-- VALORES -->
     <div class="val-grid" id="row-vals" style="display:none">
       <div class="val-item">
-        <div class="val-lbl">Valor unit.</div>
+        <div class="val-lbl">Total combo</div>
         <div class="val-num hi" id="v-unit">—</div>
       </div>
-      <div class="val-item">
-        <div class="val-lbl">Parcela museu</div>
+      <div class="val-item" id="vi-aqua" style="display:none">
+        <div class="val-lbl">Aquário</div>
+        <div class="val-num" id="v-aqua">—</div>
+      </div>
+      <div class="val-item" id="vi-museu" style="display:none">
+        <div class="val-lbl">Museu</div>
         <div class="val-num" id="v-museu">—</div>
+      </div>
+      <div class="val-item" id="vi-gex" style="display:none">
+        <div class="val-lbl">GEX</div>
+        <div class="val-num" id="v-gex">—</div>
+      </div>
+      <div class="val-item" id="vi-mar" style="display:none">
+        <div class="val-lbl">MAR</div>
+        <div class="val-num" id="v-mar">—</div>
       </div>
     </div>
 
@@ -679,23 +691,62 @@ document.getElementById('h-date').textContent =
 // ── Formatação ──
 const fmt = v => 'R$ ' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 
-// ── Tabela parcela museu por produto ──
-const museuVal = {
-  "MUSEU DE CERA - VISITANTES":50,"MUSEU DE CERA - INTEIRA":66,"MUSEU DE CERA - MEIA":33,
-  "GEX - INTEIRA":66,"GEX - MEIA":33,"GEX - COMPLEMENTO":45,"GEX - INFANTIL":33,
-  "MAR DE ESPELHOS - VISITANTE":50,"MAR DE ESPELHOS - INTEIRA":66,"MAR DE ESPELHOS - MEIA":33,
-  "COMBO AQUA + MUSEU - INTEIRA":66,"COMBO AQUA + MUSEU - MEIA":33,"COMBO AQUA + MUSEU - PROMO RJ":66,"COMBO AQUA + MUSEU - INFANTIL":33,
-  "COMBO AQUA + GEX - INTEIRA":66,"COMBO AQUA + GEX - MEIA":33,"COMBO AQUA + GEX - PROMO RJ":66,"COMBO AQUA + GEX - INFANTIL":33,
-  "COMBO AQUA + MAR - INTEIRA":66,"COMBO AQUA + MAR - MEIA":33,"COMBO AQUA + MAR - PROMO RJ":66,"COMBO AQUA + MAR - INFANTIL":33,
-  "COMBO AQUA + MAR + MUSEU - INTEIRA":66,"COMBO AQUA + MAR + MUSEU - MEIA":33,"COMBO AQUA + MAR + MUSEU - PROMO RJ":33,"COMBO AQUA + MAR + MUSEU - INFANTIL":33,
-  "COMBO AQUA + MUSEU + GEX - INTEIRA":66,"COMBO AQUA + MUSEU + GEX - MEIA":33,"COMBO AQUA + MUSEU + GEX - PROMO RJ":33,"COMBO AQUA + MUSEU + GEX - INFANTIL":33,
-  "COMBO AQUA + MAR + GEX - INTEIRA":66,"COMBO AQUA + MAR + GEX - MEIA":33,"COMBO AQUA + MAR + GEX - PROMO RJ":33,"COMBO AQUA + MAR + GEX - INFANTIL":33,
-  "EXPERIENCIA COMPLETA + GEX - INTEIRA":66,"EXPERIENCIA COMPLETA + GEX - MEIA":33,"EXPERIENCIA COMPLETA + GEX - PROMO RJ":33,"EXPERIENCIA COMPLETA + GEX - INFANTIL":33,
-  "MUSEU + MAR - DUAS ATRAÇÕES":40,"MUSEU + MAR - DUAS ATRAÇÕES MEIA":33,
-  "MUSEU + GEX - DUAS ATRAÇÕES":40,"MUSEU + GEX - DUAS ATRAÇÕES MEIA":33,
-  "MAR + MUSEU + GEX - TRÊS ATRAÇÕES":33,
-  "MAR + GEX - DUAS ATRAÇÕES":40,"MAR + GEX - DUAS ATRAÇÕES MEIA":33,
+// ── Tabela completa de preços por atração ──
+// Fonte: tabela oficial Museu de Cera RJ
+const PRECOS = {
+  // AVULSO
+  'MUSEU DE CERA - VISITANTES':   {aqua:0,   museu:50,  gex:0,   mar:0,   total:50},
+  'MUSEU DE CERA - INTEIRA':      {aqua:0,   museu:66,  gex:0,   mar:0,   total:66},
+  'MUSEU DE CERA - MEIA':         {aqua:0,   museu:33,  gex:0,   mar:0,   total:33},
+  'GEX - INTEIRA':                {aqua:0,   museu:0,   gex:50,  mar:0,   total:50},
+  'GEX - MEIA':                   {aqua:0,   museu:0,   gex:66,  mar:0,   total:66},
+  'GEX - COMPLEMENTO':            {aqua:0,   museu:0,   gex:45,  mar:0,   total:45},
+  'GEX - INFANTIL':               {aqua:0,   museu:0,   gex:33,  mar:0,   total:33},
+  'MAR DE ESPELHOS - VISITANTE':  {aqua:0,   museu:0,   gex:0,   mar:50,  total:50},
+  'MAR DE ESPELHOS - INTEIRA':    {aqua:0,   museu:0,   gex:0,   mar:66,  total:66},
+  'MAR DE ESPELHOS - MEIA':       {aqua:0,   museu:0,   gex:0,   mar:33,  total:33},
+  // COMBO DUPLO
+  'COMBO AQUA + MUSEU - INTEIRA':  {aqua:150, museu:66,  gex:0,   mar:0,   total:216},
+  'COMBO AQUA + MUSEU - MEIA':     {aqua:80,  museu:33,  gex:0,   mar:0,   total:113},
+  'COMBO AQUA + MUSEU - PROMO RJ': {aqua:99,  museu:66,  gex:0,   mar:0,   total:165},
+  'COMBO AQUA + MUSEU - INFANTIL': {aqua:70,  museu:33,  gex:0,   mar:0,   total:103},
+  'COMBO AQUA + GEX - INTEIRA':    {aqua:150, museu:0,   gex:66,  mar:0,   total:216},
+  'COMBO AQUA + GEX - MEIA':       {aqua:80,  museu:0,   gex:33,  mar:0,   total:113},
+  'COMBO AQUA + GEX - PROMO RJ':   {aqua:99,  museu:0,   gex:66,  mar:0,   total:165},
+  'COMBO AQUA + GEX - INFANTIL':   {aqua:70,  museu:0,   gex:33,  mar:0,   total:103},
+  'COMBO AQUA + MAR - INTEIRA':    {aqua:150, museu:0,   gex:0,   mar:66,  total:216},
+  'COMBO AQUA + MAR - MEIA':       {aqua:80,  museu:0,   gex:0,   mar:33,  total:113},
+  'COMBO AQUA + MAR - PROMO RJ':   {aqua:99,  museu:0,   gex:0,   mar:66,  total:165},
+  'COMBO AQUA + MAR - INFANTIL':   {aqua:70,  museu:0,   gex:0,   mar:33,  total:103},
+  // COMBO TRIPLO
+  'COMBO AQUA + MAR + MUSEU - INTEIRA':  {aqua:150, museu:40,  gex:0,   mar:40,  total:230},
+  'COMBO AQUA + MAR + MUSEU - MEIA':     {aqua:80,  museu:33,  gex:0,   mar:33,  total:146},
+  'COMBO AQUA + MAR + MUSEU - PROMO RJ': {aqua:99,  museu:40,  gex:0,   mar:40,  total:179},
+  'COMBO AQUA + MAR + MUSEU - INFANTIL': {aqua:70,  museu:33,  gex:0,   mar:33,  total:136},
+  'COMBO AQUA + MUSEU + GEX - INTEIRA':  {aqua:150, museu:40,  gex:40,  mar:0,   total:230},
+  'COMBO AQUA + MUSEU + GEX - MEIA':     {aqua:80,  museu:33,  gex:33,  mar:0,   total:146},
+  'COMBO AQUA + MUSEU + GEX - PROMO RJ': {aqua:99,  museu:40,  gex:40,  mar:0,   total:179},
+  'COMBO AQUA + MUSEU + GEX - INFANTIL': {aqua:70,  museu:33,  gex:33,  mar:0,   total:136},
+  'COMBO AQUA + MAR + GEX - INTEIRA':    {aqua:150, museu:0,   gex:40,  mar:40,  total:230},
+  'COMBO AQUA + MAR + GEX - MEIA':       {aqua:80,  museu:0,   gex:33,  mar:28,  total:141},
+  'COMBO AQUA + MAR + GEX - PROMO RJ':   {aqua:99,  museu:0,   gex:40,  mar:40,  total:179},
+  'COMBO AQUA + MAR + GEX - INFANTIL':   {aqua:70,  museu:0,   gex:33,  mar:33,  total:136},
+  // EXPERIÊNCIA COMPLETA
+  'EXPERIENCIA COMPLETA + GEX - INTEIRA':  {aqua:140, museu:33,  gex:33,  mar:33,  total:239},
+  'EXPERIENCIA COMPLETA + GEX - MEIA':     {aqua:80,  museu:33,  gex:33,  mar:33,  total:179},
+  'EXPERIENCIA COMPLETA + GEX - PROMO RJ': {aqua:99,  museu:33,  gex:33,  mar:33,  total:198},
+  'EXPERIENCIA COMPLETA + GEX - INFANTIL': {aqua:70,  museu:33,  gex:33,  mar:33,  total:169},
+  // COMPLEMENTOS (sem AQUA na tabela — valores estimados)
+  'MUSEU + MAR - DUAS ATRAÇÕES':      {aqua:0, museu:40, gex:0,  mar:40,  total:80},
+  'MUSEU + MAR - DUAS ATRAÇÕES MEIA': {aqua:0, museu:33, gex:0,  mar:33,  total:66},
+  'MUSEU + GEX - DUAS ATRAÇÕES':      {aqua:0, museu:40, gex:40, mar:0,   total:80},
+  'MUSEU + GEX - DUAS ATRAÇÕES MEIA': {aqua:0, museu:33, gex:33, mar:0,   total:66},
+  'MAR + MUSEU + GEX - TRÊS ATRAÇÕES':{aqua:0, museu:33, gex:33, mar:33,  total:99},
+  'MAR + GEX - DUAS ATRAÇÕES':        {aqua:0, museu:0,  gex:40, mar:40,  total:80},
+  'MAR + GEX - DUAS ATRAÇÕES MEIA':   {aqua:0, museu:0,  gex:33, mar:33,  total:66},
 };
+// Atalho para compatibilidade
+const museuVal = Object.fromEntries(Object.entries(PRECOS).map(([k,v])=>[k,v.museu]));
 
 // ── Produtos por categoria ──
 const produtosPorCat = {
@@ -703,8 +754,8 @@ const produtosPorCat = {
     ["Museu de Cera — Visitantes · R$ 50",   "MUSEU DE CERA - VISITANTES|50"],
     ["Museu de Cera — Inteira · R$ 66",       "MUSEU DE CERA - INTEIRA|66"],
     ["Museu de Cera — Meia · R$ 33",          "MUSEU DE CERA - MEIA|33"],
-    ["GEX — Inteira · R$ 66",                 "GEX - INTEIRA|66"],
-    ["GEX — Meia · R$ 33",                    "GEX - MEIA|33"],
+    ["GEX — Inteira · R$ 50",                 "GEX - INTEIRA|50"],
+    ["GEX — Meia · R$ 66",                    "GEX - MEIA|66"],
     ["GEX — Complemento · R$ 45",             "GEX - COMPLEMENTO|45"],
     ["GEX — Infantil · R$ 33",                "GEX - INFANTIL|33"],
     ["Mar de Espelhos — Visitante · R$ 50",   "MAR DE ESPELHOS - VISITANTE|50"],
@@ -728,22 +779,22 @@ const produtosPorCat = {
   combo_triplo: [
     ["Combo Aqua + Mar + Museu — Inteira · R$ 230",   "COMBO AQUA + MAR + MUSEU - INTEIRA|230"],
     ["Combo Aqua + Mar + Museu — Meia · R$ 146",      "COMBO AQUA + MAR + MUSEU - MEIA|146"],
-    ["Combo Aqua + Mar + Museu — Promo RJ · R$ 173",  "COMBO AQUA + MAR + MUSEU - PROMO RJ|173"],
+    ["Combo Aqua + Mar + Museu — Promo RJ · R$ 179",  "COMBO AQUA + MAR + MUSEU - PROMO RJ|179"],
     ["Combo Aqua + Mar + Museu — Infantil · R$ 136",  "COMBO AQUA + MAR + MUSEU - INFANTIL|136"],
     ["Combo Aqua + Museu + GEX — Inteira · R$ 230",   "COMBO AQUA + MUSEU + GEX - INTEIRA|230"],
-    ["Combo Aqua + Museu + GEX — Meia · R$ 141",      "COMBO AQUA + MUSEU + GEX - MEIA|141"],
-    ["Combo Aqua + Museu + GEX — Promo RJ · R$ 173",  "COMBO AQUA + MUSEU + GEX - PROMO RJ|173"],
+    ["Combo Aqua + Museu + GEX — Meia · R$ 146",      "COMBO AQUA + MUSEU + GEX - MEIA|146"],
+    ["Combo Aqua + Museu + GEX — Promo RJ · R$ 179",  "COMBO AQUA + MUSEU + GEX - PROMO RJ|179"],
     ["Combo Aqua + Museu + GEX — Infantil · R$ 136",  "COMBO AQUA + MUSEU + GEX - INFANTIL|136"],
     ["Combo Aqua + Mar + GEX — Inteira · R$ 230",     "COMBO AQUA + MAR + GEX - INTEIRA|230"],
     ["Combo Aqua + Mar + GEX — Meia · R$ 141",        "COMBO AQUA + MAR + GEX - MEIA|141"],
-    ["Combo Aqua + Mar + GEX — Promo RJ · R$ 173",    "COMBO AQUA + MAR + GEX - PROMO RJ|173"],
+    ["Combo Aqua + Mar + GEX — Promo RJ · R$ 179",    "COMBO AQUA + MAR + GEX - PROMO RJ|179"],
     ["Combo Aqua + Mar + GEX — Infantil · R$ 136",    "COMBO AQUA + MAR + GEX - INFANTIL|136"],
   ],
   exp_completa: [
     ["Experiência Completa + GEX — Inteira · R$ 239",   "EXPERIENCIA COMPLETA + GEX - INTEIRA|239"],
-    ["Experiência Completa + GEX — Meia · R$ 173",      "EXPERIENCIA COMPLETA + GEX - MEIA|173"],
+    ["Experiência Completa + GEX — Meia · R$ 179",      "EXPERIENCIA COMPLETA + GEX - MEIA|179"],
     ["Experiência Completa + GEX — Promo RJ · R$ 198",  "EXPERIENCIA COMPLETA + GEX - PROMO RJ|198"],
-    ["Experiência Completa + GEX — Infantil · R$ 163",  "EXPERIENCIA COMPLETA + GEX - INFANTIL|163"],
+    ["Experiência Completa + GEX — Infantil · R$ 169",  "EXPERIENCIA COMPLETA + GEX - INFANTIL|169"],
   ],
   complementos: [
     ["Museu + Mar — Duas Atrações · R$ 80",          "MUSEU + MAR - DUAS ATRAÇÕES|80"],
@@ -826,8 +877,19 @@ function onProduto() {
   const [nome, preco] = val.split('|');
   document.getElementById('badge').textContent = nome;
   document.getElementById('v-unit').textContent = fmt(Number(preco));
-  const m = museuVal[nome];
-  document.getElementById('v-museu').textContent = m ? fmt(m) : '—';
+
+  // Mostrar apenas parcelas que têm valor > 0
+  const p = PRECOS[nome] || {};
+  const parcs = [{id:'aqua',v:p.aqua},{id:'museu',v:p.museu},{id:'gex',v:p.gex},{id:'mar',v:p.mar}];
+  parcs.forEach(({id,v}) => {
+    const item = document.getElementById('vi-'+id);
+    const num  = document.getElementById('v-'+id);
+    if (item && num) {
+      if (v && v > 0) { item.style.display = ''; num.textContent = fmt(v); }
+      else            { item.style.display = 'none'; }
+    }
+  });
+
   document.getElementById('row-badge').style.display = '';
   document.getElementById('row-vals').style.display  = '';
   calcTotal();
@@ -920,11 +982,12 @@ async function salvar() {
   }
 
   const [nomeProd, preco] = produto.split('|');
+  const precoProd = PRECOS[nomeProd] || {};
   const reg = {
     data, vendedor, categoria,
     produto: nomeProd,
     valorUnitario: Number(preco),
-    valorMuseu: museuVal[nomeProd] || 0,
+    valorMuseu: precoProd.museu || 0,
     quantidade: qtd,
     total: Number(preco) * qtd,
     canal,
