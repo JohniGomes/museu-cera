@@ -283,10 +283,10 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
       <tbody id="tbl-atr-body"></tbody>
     </table></div>
   </div>
-  <div class="card">
+  <div class="card" style="overflow:visible">
     <div class="sec-title">Conversão por Atração · por Vendedor</div>
-    <div class="tbl-wrap">
-      <table style="width:100%;border-collapse:collapse;table-layout:auto">
+    <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%">
+      <table style="border-collapse:collapse;table-layout:auto;white-space:nowrap">
         <thead>
           <tr>
             <th rowspan="2" style="text-align:left;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;padding:6px 10px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">Vendedor</th>
@@ -857,32 +857,36 @@ function renderConvAtracao(at, a1) {
   const tdR    = tdBase+`;text-align:right`;
   const tdBL   = tdR+`;border-left:1px solid var(--bd)`;
 
-  // % é sobre o VALOR total da coluna (não sobre a quantidade)
-  const cel = (atr, totVal, first) => d => {
+  // % é a participação de cada atração no total geral do vendedor
+  const cel = (atr, totVal, first) => (d, totalVend) => {
     const q = d[atr].qtd, r = d[atr].val;
-    const p = totVal > 0 ? (r / totVal * 100).toFixed(1)+'%' : '—';
+    const p = totalVend > 0 ? (r / totalVend * 100).toFixed(1)+'%' : '—';
     const brd = first ? tdBL : tdR;
     return `<td style="${brd}">${fmtN(q)}</td><td style="${tdR};color:var(--g);font-weight:600">${fmt(r)}</td><td style="${tdR}">${p}</td>`;
   };
 
   Object.entries(por).sort((a,b)=>b[1].museu.val-a[1].museu.val).forEach(([v,d]) => {
+    // Total do vendedor = soma de todas as atrações
+    const totalVend = d.museu.val + d.gex.val + d.mar.val + d.aqua.val;
     const tr = document.createElement('tr');
     tr.innerHTML = `<td style="${tdBase};font-weight:600">${v}</td>`
-      + cel('museu',totValMuseu,true)(d)
-      + cel('gex',  totValGex,  true)(d)
-      + cel('mar',  totValMar,  true)(d)
-      + cel('aqua', totValAqua, true)(d);
+      + cel('museu',totValMuseu,true)(d, totalVend)
+      + cel('gex',  totValGex,  true)(d, totalVend)
+      + cel('mar',  totValMar,  true)(d, totalVend)
+      + cel('aqua', totValAqua, true)(d, totalVend);
     tb.appendChild(tr);
   });
 
-  // Linha de totais
+  // Linha de totais — % de cada atração sobre o total geral
+  const totalGeral = totValMuseu + totValGex + totValMar + totValAqua;
+  const pTot = v => totalGeral > 0 ? (v/totalGeral*100).toFixed(1)+'%' : '—';
   const bt = `border-top:2px solid var(--bd)`;
   const tTr = document.createElement('tr');
   tTr.innerHTML = `<td style="${tdBase};font-weight:700;${bt}">Total</td>`
-    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQMuseu)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValMuseu)}</td><td style="${tdR};${bt}">100%</td>`
-    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQGex)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValGex)}</td><td style="${tdR};${bt}">100%</td>`
-    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQMar)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValMar)}</td><td style="${tdR};${bt}">100%</td>`
-    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQAqua)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValAqua)}</td><td style="${tdR};${bt}">100%</td>`;
+    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQMuseu)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValMuseu)}</td><td style="${tdR};${bt}">${pTot(totValMuseu)}</td>`
+    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQGex)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValGex)}</td><td style="${tdR};${bt}">${pTot(totValGex)}</td>`
+    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQMar)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValMar)}</td><td style="${tdR};${bt}">${pTot(totValMar)}</td>`
+    +`<td style="${tdBL};font-weight:700;${bt}">${fmtN(totQAqua)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValAqua)}</td><td style="${tdR};${bt}">${pTot(totValAqua)}</td>`;
   tb.appendChild(tTr);
 }
 
