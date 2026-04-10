@@ -729,12 +729,14 @@ function renderCharts(at,de,ate,tipo){
   const dmA1={};a1Recs.forEach(r=>{const d=new Date(r._data.getTime()+365*864e5).toISOString().split('T')[0];if(!dmA1[d])dmA1[d]=0;dmA1[d]+=valorReg(r,tipo);});
   const diasSet=new Set([...Object.keys(dmA0),...Object.keys(dmA1)]);
   const dias=[...diasSet].sort();
-  // No mobile barras precisam de mais espaço — 100px por par garante legibilidade
+  // Mobile: máximo 8 dias visíveis na tela, scroll para o resto
+  // Desktop: 80px por par, sem limite
   const isMobile = window.innerWidth <= 600;
-  const pxPorDia = isMobile ? 100 : 80;
-  const minWidth = isMobile ? 320 : 300;
+  const pxPorDia = isMobile
+    ? Math.floor(window.innerWidth / Math.min(dias.length, 8))
+    : 80;
   document.getElementById('w-meta').style.width = dias.length > 1
-    ? Math.max(dias.length * pxPorDia, minWidth) + 'px'
+    ? Math.max(dias.length * pxPorDia, isMobile ? window.innerWidth - 32 : 300) + 'px'
     : '100%';
   dc('meta');charts['meta']=new Chart(document.getElementById('ch-meta'),{
     type:'bar',
@@ -742,9 +744,9 @@ function renderCharts(at,de,ate,tipo){
       labels:dias.map(d=>{const[,m,dd]=d.split('-');return`${dd}/${m}`;}),
       datasets:[
         {label:'Ano Atual',data:dias.map(d=>dmA0[d]||0),backgroundColor:CORES[0]+'cc',borderRadius:3,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:isMobile?8:10,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}},
+          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:10,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}},
         {label:'Ano Anterior',data:dias.map(d=>dmA1[d]||0),backgroundColor:CORES[1]+'99',borderRadius:3,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:isMobile?8:10,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}}
+          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:10,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}}
       ]
     },
     options:{
@@ -759,8 +761,8 @@ function renderCharts(at,de,ate,tipo){
         y:{display:false,grace:'30%'}
       },
       layout:{padding:{top:28,left:4,right:4,bottom:4}},
-      barPercentage: isMobile ? 0.95 : 0.85,
-      categoryPercentage: isMobile ? 0.85 : 0.7
+      barPercentage:0.85,
+      categoryPercentage:0.7
     }
   });
 }
