@@ -329,8 +329,8 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="card">
     <div class="sec-title">Ranking — Base Museu</div>
     <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col style="width:32px"><col><col style="width:56px"><col style="width:48px"></colgroup>
-      <thead><tr><th style="overflow:visible">#</th><th>Vendedor</th><th class="r">Ing.</th><th class="r">Part.%</th></tr></thead>
+      <colgroup><col style="width:32px"><col><col style="width:44px"><col style="width:72px"><col style="width:48px"></colgroup>
+      <thead><tr><th style="overflow:visible">#</th><th>Vendedor</th><th class="r">Ing.</th><th class="r">Valor</th><th class="r">Part.%</th></tr></thead>
       <tbody id="tbl-rank-body"></tbody>
     </table></div>
   </div>
@@ -916,7 +916,7 @@ function renderRankingMuseu(at){
   const tb=document.getElementById('tbl-rank-body');tb.innerHTML='';
   Object.entries(por).sort((a,b)=>b[1].ing-a[1].ing).forEach(([v,d],i)=>{
     const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="overflow:visible"><span class="rank-num">#${i+1}</span></td><td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.ing)}</td><td class="r">${pct(d.ing,totalIng)}</td>`;
+    tr.innerHTML=`<td style="overflow:visible"><span class="rank-num">#${i+1}</span></td><td style="font-weight:600">${v}</td><td class="r val-g">${fmtN(d.ing)}</td><td class="r">${fmt(d.val)}</td><td class="r">${pct(d.ing,totalIng)}</td>`;
     tb.appendChild(tr);
   });
 }
