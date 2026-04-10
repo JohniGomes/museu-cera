@@ -61,12 +61,12 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .card{background:var(--white);border-radius:14px;padding:18px;border:1px solid var(--bd);box-shadow:0 1px 8px rgba(0,0,0,0.04);box-sizing:border-box;min-width:0;overflow:hidden}
 .ch{position:relative;height:200px;width:100%}
 .ch-tall{position:relative;height:250px;width:100%}
-.ch-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;display:flex;justify-content:center}
+.ch-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
 .ch-scroll::-webkit-scrollbar{height:4px}
 .ch-scroll::-webkit-scrollbar-track{background:transparent}
 .ch-scroll::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
-/* Wrapper interno dos gráficos de barra com scroll */
-.ch-bar-wrap{position:relative;height:220px;min-width:100%}
+/* Wrapper interno dos gráficos de barra — sem min-width para permitir scroll */
+.ch-bar-wrap{position:relative;height:220px}
 
 /* Card donut duplo — altura auto para acomodar legenda */
 .donut-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
