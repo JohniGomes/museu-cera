@@ -741,7 +741,7 @@ function renderCharts(at,de,ate,tipo){
   const dias=[...diasSet].sort();
   // Largura fixa por par de barras — centraliza quando cabe, scroll quando ultrapassa
   const isMobile = window.innerWidth <= 600;
-  const pxPorDia = isMobile ? 55 : 80;
+  const pxPorDia = isMobile ? 70 : 110;
   const wCalculado = dias.length * pxPorDia;
   const wContainer = document.getElementById('w-meta').parentElement.clientWidth || 600;
   document.getElementById('w-meta').style.width = wCalculado <= wContainer
@@ -758,7 +758,7 @@ function renderCharts(at,de,ate,tipo){
               if(!v) return '';
               const d=dias[ctx.dataIndex];
               const ing=dqA0[d]||0;
-              return ['R$'+(v/1000).toFixed(1)+'k', ing+' ing'];
+              return [fmt(v), ing+' ing'];
             },rotation:0}},
         {label:'Ano Anterior',data:dias.map(d=>dmA1[d]||0),backgroundColor:CORES[1]+'99',borderRadius:3,borderSkipped:false,
           datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:9,weight:'600'},
@@ -766,7 +766,7 @@ function renderCharts(at,de,ate,tipo){
               if(!v) return '';
               const d=dias[ctx.dataIndex];
               const ing=dqA1[d]||0;
-              return ['R$'+(v/1000).toFixed(1)+'k', ing+' ing'];
+              return [fmt(v), ing+' ing'];
             },rotation:0}}
       ]
     },
