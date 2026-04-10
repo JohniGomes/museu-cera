@@ -61,7 +61,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .card{background:var(--white);border-radius:14px;padding:18px;border:1px solid var(--bd);box-shadow:0 1px 8px rgba(0,0,0,0.04);box-sizing:border-box;min-width:0;overflow:hidden}
 .ch{position:relative;height:200px;width:100%}
 .ch-tall{position:relative;height:250px;width:100%}
-.ch-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
+.ch-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;display:flex;justify-content:center}
 .ch-scroll::-webkit-scrollbar{height:4px}
 .ch-scroll::-webkit-scrollbar-track{background:transparent}
 .ch-scroll::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
@@ -252,7 +252,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 <!-- ── VENDAS A0 vs A1 POR DIA ── -->
 <div class="g1 card">
   <div class="sec-title">Vendas por Dia — Ano Atual vs Ano Anterior</div>
-  <div class="ch-scroll"><div class="ch-tall" id="w-meta"><canvas id="ch-meta"></canvas></div></div>
+  <div class="ch-scroll"><div class="ch-bar-wrap" id="w-meta" style="height:260px"><canvas id="ch-meta"></canvas></div></div>
 </div>
 
 <!-- ── TABELAS LINHA 1 ── -->
@@ -717,7 +717,9 @@ function renderCharts(at,de,ate,tipo){
   const dmA1={};a1Recs.forEach(r=>{const d=new Date(r._data.getTime()+365*864e5).toISOString().split('T')[0];if(!dmA1[d])dmA1[d]=0;dmA1[d]+=valorReg(r,tipo);});
   const diasSet=new Set([...Object.keys(dmA0),...Object.keys(dmA1)]);
   const dias=[...diasSet].sort();
-  if(dias.length>8)document.getElementById('w-meta').style.width=(dias.length*56)+'px';
+  // Largura: 80px por par de barras, mínimo 100% do container
+  const wMeta = Math.max(dias.length * 80, 100);
+  document.getElementById('w-meta').style.width = dias.length > 1 ? (dias.length * 80) + 'px' : '100%';
   dc('meta');charts['meta']=new Chart(document.getElementById('ch-meta'),{
     type:'bar',
     data:{
