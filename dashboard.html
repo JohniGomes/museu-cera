@@ -61,9 +61,12 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .card{background:var(--white);border-radius:14px;padding:18px;border:1px solid var(--bd);box-shadow:0 1px 8px rgba(0,0,0,0.04);box-sizing:border-box;min-width:0;overflow:hidden}
 .ch{position:relative;height:200px;width:100%}
 .ch-tall{position:relative;height:250px;width:100%}
-.ch-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
-.ch-scroll::-webkit-scrollbar{height:3px}
+.ch-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
+.ch-scroll::-webkit-scrollbar{height:4px}
+.ch-scroll::-webkit-scrollbar-track{background:transparent}
 .ch-scroll::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
+/* Wrapper interno dos gráficos de barra com scroll */
+.ch-bar-wrap{position:relative;height:220px;min-width:100%}
 
 /* Card donut duplo — altura auto para acomodar legenda */
 .donut-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
@@ -206,8 +209,14 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 
 <!-- ── GRÁFICOS LINHA 1 ── -->
 <div class="g2">
-  <div class="card"><div class="sec-title">Vendas por Vendedor</div><div class="ch-scroll"><div class="ch" id="w-vv"><canvas id="ch-vv"></canvas></div></div></div>
-  <div class="card"><div class="sec-title">Ingressos por Vendedor</div><div class="ch-scroll"><div class="ch" id="w-vq"><canvas id="ch-vq"></canvas></div></div></div>
+  <div class="card">
+    <div class="sec-title">Vendas por Vendedor</div>
+    <div class="ch-scroll"><div class="ch-bar-wrap" id="w-vv"><canvas id="ch-vv"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="sec-title">Ingressos por Vendedor</div>
+    <div class="ch-scroll"><div class="ch-bar-wrap" id="w-vq"><canvas id="ch-vq"></canvas></div></div>
+  </div>
 </div>
 
 <!-- ── GRÁFICOS LINHA 2 ── -->
@@ -267,18 +276,24 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="card">
     <div class="sec-title">Conversão por Atração · por Vendedor</div>
     <div class="tbl-wrap">
-      <table class="tbl" style="min-width:520px">
+      <table style="width:100%;border-collapse:collapse;table-layout:auto">
         <thead>
           <tr>
-            <th rowspan="2">Vendedor</th>
-            <th colspan="3" style="text-align:center;border-left:1px solid var(--bd)">Museu</th>
-            <th colspan="3" style="text-align:center;border-left:1px solid var(--bd)">GEX</th>
-            <th colspan="3" style="text-align:center;border-left:1px solid var(--bd)">MAR</th>
+            <th rowspan="2" style="text-align:left;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;padding:6px 10px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">Vendedor</th>
+            <th colspan="3" style="text-align:center;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--bd);border-left:1px solid var(--bd);white-space:nowrap">Museu</th>
+            <th colspan="3" style="text-align:center;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--bd);border-left:1px solid var(--bd);white-space:nowrap">GEX</th>
+            <th colspan="3" style="text-align:center;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em;padding:6px 8px;background:var(--bg);border-bottom:1px solid var(--bd);border-left:1px solid var(--bd);white-space:nowrap">MAR</th>
           </tr>
           <tr>
-            <th class="r" style="border-left:1px solid var(--bd)">Qtd</th><th class="r">R$</th><th class="r">%</th>
-            <th class="r" style="border-left:1px solid var(--bd)">Qtd</th><th class="r">R$</th><th class="r">%</th>
-            <th class="r" style="border-left:1px solid var(--bd)">Qtd</th><th class="r">R$</th><th class="r">%</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);border-left:1px solid var(--bd);white-space:nowrap">Qtd</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">R$</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">%</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);border-left:1px solid var(--bd);white-space:nowrap">Qtd</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">R$</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">%</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);border-left:1px solid var(--bd);white-space:nowrap">Qtd</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">R$</th>
+            <th style="text-align:right;font-size:9px;font-weight:600;color:var(--mu);text-transform:uppercase;padding:5px 8px;background:var(--bg);border-bottom:1px solid var(--bd);white-space:nowrap">%</th>
           </tr>
         </thead>
         <tbody id="tbl-conv-atr-body"></tbody>
@@ -667,9 +682,10 @@ function renderCharts(at,de,ate,tipo){
   // Vendas por vendedor
   const pv={};at.forEach(r=>{const v=r['Vendedor']||'S/N';if(!pv[v])pv[v]={val:0,qtd:0};pv[v].val+=valorReg(r,tipo);pv[v].qtd+=Number(r['Quantidade'])||0;});
   const vends=Object.keys(pv).sort((a,b)=>pv[b].val-pv[a].val);
-  const BW=60;
-  if(vends.length>5)document.getElementById('w-vv').style.width=(vends.length*BW)+'px';
-  if(vends.length>5)document.getElementById('w-vq').style.width=(vends.length*BW)+'px';
+  const BW=Math.max(80, Math.floor(300/Math.max(vends.length,1)));
+  const wVend=Math.max(300, vends.length*BW);
+  document.getElementById('w-vv').style.width=wVend+'px';
+  document.getElementById('w-vq').style.width=wVend+'px';
   dc('vv');charts['vv']=new Chart(document.getElementById('ch-vv'),{type:'bar',data:{labels:vends,datasets:[{data:vends.map(v=>pv[v].val),backgroundColor:CORES,borderRadius:5,borderSkipped:false}]},options:optsBarV(fmt)});
   dc('vq');charts['vq']=new Chart(document.getElementById('ch-vq'),{type:'bar',data:{labels:vends,datasets:[{data:vends.map(v=>pv[v].qtd),backgroundColor:CORES.map(c=>c+'cc'),borderRadius:5,borderSkipped:false}]},options:optsBarV(fmtN)});
 
@@ -708,23 +724,26 @@ function renderCharts(at,de,ate,tipo){
       labels:dias.map(d=>{const[,m,dd]=d.split('-');return`${dd}/${m}`;}),
       datasets:[
         {label:'Ano Atual',data:dias.map(d=>dmA0[d]||0),backgroundColor:CORES[0]+'cc',borderRadius:3,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:7,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}},
+          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:10,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}},
         {label:'Ano Anterior',data:dias.map(d=>dmA1[d]||0),backgroundColor:CORES[1]+'99',borderRadius:3,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:7,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}}
+          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:10,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}}
       ]
     },
     options:{
       responsive:true,maintainAspectRatio:false,
       plugins:{
-        legend:{labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},
+        legend:{
+          position:'top',
+          labels:{font:{family:'Rajdhani',size:13},boxWidth:12,padding:20,color:'#10403B'}
+        },
         datalabels:{},
         tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.raw)}}
       },
       scales:{
-        x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:9},color:'#4C5958',maxRotation:45}},
-        y:{display:false,grace:'25%'}
+        x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:11},color:'#4C5958',maxRotation:45}},
+        y:{display:false,grace:'30%'}
       },
-      layout:{padding:{top:32}},
+      layout:{padding:{top:36,left:4,right:4,bottom:4}},
       barPercentage:0.85,
       categoryPercentage:0.7
     }
@@ -814,15 +833,19 @@ function renderConvAtracao(at, a1) {
 
   const tb = document.getElementById('tbl-conv-atr-body'); tb.innerHTML = '';
 
-  // Linhas por vendedor — ordenado por museu desc
+  const tdBase = `padding:8px 10px;border-bottom:1px solid var(--bd);font-size:11px;font-weight:500;white-space:nowrap`;
+  const tdR    = tdBase+`;text-align:right`;
+  const tdBL   = tdR+`;border-left:1px solid var(--bd)`;
+
   Object.entries(por).sort((a,b) => b[1].museu.qtd - a[1].museu.qtd).forEach(([v,d]) => {
     const tr = document.createElement('tr');
-    const cel = (atr, tot) => {
+    const cel = (atr, tot, first) => {
       const q = d[atr].qtd, r = d[atr].val;
       const p = tot > 0 ? (q / tot * 100).toFixed(1) + '%' : '—';
-      return `<td class="r" style="border-left:1px solid var(--bd)">${fmtN(q)}</td><td class="r val-g">${fmt(r)}</td><td class="r">${p}</td>`;
+      const brd = first ? tdBL : tdR;
+      return `<td style="${brd}">${fmtN(q)}</td><td style="${tdR};color:var(--g);font-weight:600">${fmt(r)}</td><td style="${tdR}">${p}</td>`;
     };
-    tr.innerHTML = `<td style="font-weight:600">${v}</td>${cel('museu',totMuseu)}${cel('gex',totGex)}${cel('mar',totMar)}`;
+    tr.innerHTML = `<td style="${tdBase};font-weight:600">${v}</td>${cel('museu',totMuseu,true)}${cel('gex',totGex,true)}${cel('mar',totMar,true)}`;
     tb.appendChild(tr);
   });
 
@@ -830,19 +853,13 @@ function renderConvAtracao(at, a1) {
   const totValMuseu = Object.values(por).reduce((a,b) => a + b.museu.val, 0);
   const totValGex   = Object.values(por).reduce((a,b) => a + b.gex.val,   0);
   const totValMar   = Object.values(por).reduce((a,b) => a + b.mar.val,   0);
+  const bt = `border-top:2px solid var(--bd)`;
   const tTr = document.createElement('tr');
-  tTr.style.borderTop = '2px solid var(--bd)';
   tTr.innerHTML = `
-    <td style="font-weight:600;border-top:2px solid var(--bd)">Total</td>
-    <td class="r" style="border-left:1px solid var(--bd);border-top:2px solid var(--bd);font-weight:600">${fmtN(totMuseu)}</td>
-    <td class="r val-g" style="border-top:2px solid var(--bd);font-weight:600">${fmt(totValMuseu)}</td>
-    <td class="r" style="border-top:2px solid var(--bd)">100%</td>
-    <td class="r" style="border-left:1px solid var(--bd);border-top:2px solid var(--bd);font-weight:600">${fmtN(totGex)}</td>
-    <td class="r val-g" style="border-top:2px solid var(--bd);font-weight:600">${fmt(totValGex)}</td>
-    <td class="r" style="border-top:2px solid var(--bd)">100%</td>
-    <td class="r" style="border-left:1px solid var(--bd);border-top:2px solid var(--bd);font-weight:600">${fmtN(totMar)}</td>
-    <td class="r val-g" style="border-top:2px solid var(--bd);font-weight:600">${fmt(totValMar)}</td>
-    <td class="r" style="border-top:2px solid var(--bd)">100%</td>`;
+    <td style="${tdBase};font-weight:700;${bt}">Total</td>
+    <td style="${tdBL};font-weight:700;${bt}">${fmtN(totMuseu)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValMuseu)}</td><td style="${tdR};${bt}">100%</td>
+    <td style="${tdBL};font-weight:700;${bt}">${fmtN(totGex)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValGex)}</td><td style="${tdR};${bt}">100%</td>
+    <td style="${tdBL};font-weight:700;${bt}">${fmtN(totMar)}</td><td style="${tdR};color:var(--g);font-weight:700;${bt}">${fmt(totValMar)}</td><td style="${tdR};${bt}">100%</td>`;
   tb.appendChild(tTr);
 }
 
