@@ -173,11 +173,13 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
     <select id="f-atr" onchange="aplicar()"><option value="">Todas</option></select>
   </div>
   <div class="flt-grp">
-    <span class="flt-lbl">Tipo Museu</span>
+    <span class="flt-lbl">Tipo</span>
     <select id="f-tipo" onchange="aplicar()">
       <option value="">Todos</option>
-      <option value="museu_venda">Só Museu</option>
-      <option value="todas_atracoes">Todas as Atrações</option>
+      <option value="museu">Museu</option>
+      <option value="gex">GEX</option>
+      <option value="mar">MAR</option>
+      <option value="aqua">AQUA</option>
     </select>
   </div>
   <div class="flt-sep"></div>
@@ -194,8 +196,8 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="kpi"><div class="kpi-ico" style="background:#d6eae8"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="kpi-lbl">Vendas Totais</div><div class="kpi-val" id="k-vend">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-vend-a1"></span><span class="kpi-var ne" id="k-vend-v"></span></div></div>
   <div class="kpi"><div class="kpi-ico" style="background:#dde8e7"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="kpi-lbl">Ingressos Vendidos</div><div class="kpi-val" id="k-ing">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-ing-a1"></span><span class="kpi-var ne" id="k-ing-v"></span></div></div>
   <div class="kpi"><div class="kpi-ico" style="background:#e8f0ef"><svg viewBox="0 0 24 24" fill="none" stroke="#4C5958" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/></svg></div><div class="kpi-lbl">Ticket Médio</div><div class="kpi-val" id="k-tkt">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-tkt-a1"></span><span class="kpi-var ne" id="k-tkt-v"></span></div></div>
-  <div class="kpi"><div class="kpi-ico" style="background:#dde8e7"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="kpi-lbl">Ating. da Meta</div><div class="kpi-val" id="k-meta">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-meta-a1"></span><span class="kpi-var ne" id="k-meta-v"></span><span class="kpi-a1" id="k-conv-mobile" style="display:none"></span></div></div>
-  <div class="kpi kpi-conv-mobile"><div class="kpi-ico" style="background:#e8f0ef"><svg viewBox="0 0 24 24" fill="none" stroke="#4C5958" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="kpi-lbl">Conversão Museu</div><div class="kpi-val" id="k-conv">—</div><div class="kpi-cmp"><span class="kpi-a1" style="color:var(--mu2);font-size:11px" id="k-conv-info"></span></div></div>
+  <div class="kpi"><div class="kpi-ico" style="background:#dde8e7"><svg viewBox="0 0 24 24" fill="none" stroke="#127369" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="kpi-lbl">PAX Aquário</div><div class="kpi-val" id="k-pax">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-pax-a1"></span><span class="kpi-var ne" id="k-pax-v"></span></div></div>
+  <div class="kpi kpi-conv-mobile"><div class="kpi-ico" style="background:#e8f0ef"><svg viewBox="0 0 24 24" fill="none" stroke="#4C5958" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div><div class="kpi-lbl">Conversão Museu</div><div class="kpi-val" id="k-conv">—</div><div class="kpi-cmp"><span class="kpi-a1" id="k-conv-a1"></span><span class="kpi-var ne" id="k-conv-v"></span></div></div>
 </div>
 
 <!-- ── GRÁFICOS LINHA 1 ── -->
@@ -206,13 +208,25 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 
 <!-- ── GRÁFICOS LINHA 2 ── -->
 <div class="g2">
-  <div class="card"><div class="sec-title">Por Tipo de Venda</div><div class="ch"><canvas id="ch-tipo"></canvas></div></div>
-  <div class="card"><div class="sec-title">Por Atração</div><div class="ch"><canvas id="ch-atr"></canvas></div></div>
+  <div class="card">
+    <div class="sec-title">Por Tipo de Venda</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Valor R$</div><div class="ch"><canvas id="ch-tipo"></canvas></div></div>
+      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Quantidade</div><div class="ch"><canvas id="ch-tipo-qtd"></canvas></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sec-title">Por Atração</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Valor R$</div><div class="ch"><canvas id="ch-atr"></canvas></div></div>
+      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Quantidade</div><div class="ch"><canvas id="ch-atr-qtd"></canvas></div></div>
+    </div>
+  </div>
 </div>
 
-<!-- ── META POR DIA ── -->
+<!-- ── VENDAS A0 vs A1 POR DIA ── -->
 <div class="g1 card">
-  <div class="sec-title">Meta vs Realizado — por dia</div>
+  <div class="sec-title">Vendas por Dia — Ano Atual vs Ano Anterior</div>
   <div class="ch-scroll"><div class="ch-tall" id="w-meta"><canvas id="ch-meta"></canvas></div></div>
 </div>
 
@@ -235,11 +249,11 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
     </table></div>
   </div>
   <div class="card">
-    <div class="sec-title">Atração por Vendedor</div>
+    <div class="sec-title">Conversão por Atração</div>
     <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col><col style="width:52px"><col style="width:52px"><col style="width:52px"><col style="width:48px"></colgroup>
-      <thead><tr><th>Vendedor</th><th class="r">Museu</th><th class="r">GEX</th><th class="r">MAR</th><th class="r">Part.%</th></tr></thead>
-      <tbody id="tbl-atr-vend-body"></tbody>
+      <colgroup><col><col style="width:60px"><col style="width:60px"><col style="width:56px"></colgroup>
+      <thead><tr><th>Atração</th><th class="r">PAX</th><th class="r">PAX Aquá.</th><th class="r">Conv.%</th></tr></thead>
+      <tbody id="tbl-conv-atr-body"></tbody>
     </table></div>
   </div>
 </div>
@@ -276,9 +290,14 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 
 </div><!-- /page -->
 <script>
-const SHEET_ID  = "1YnzKPPFKNk-j1iYL9YGi2hnHFG1yClYAdGJ63iLXyGY";
-const ABA_GID   = "0";
-const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${ABA_GID}`;
+const SHEET_ID    = "1YnzKPPFKNk-j1iYL9YGi2hnHFG1yClYAdGJ63iLXyGY";
+const ABA_GID     = "0";
+const SHEET_URL   = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${ABA_GID}`;
+// GID da aba Precos — Gustavo deve criar a aba e colar o GID aqui
+// Para obter o GID: abrir a aba Precos no Sheets → copiar o número após "gid=" na URL
+const PRECOS_GID  = "412546681";
+const PRECOS_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${PRECOS_GID}`;
+
 Chart.register(ChartDataLabels);
 
 const CORES = ['#127369','#8AA6A3','#4C5958','#10403B','#6B9E9A','#2E6B65','#A8C5C2','#1A5550'];
@@ -360,6 +379,7 @@ const PRECOS = {
   'MAR + GEX - DUAS ATRAÇÕES MEIA':   {aqua:0, museu:0,  gex:33, mar:33,  total:66},
 };
 // Derivar listas de pertencimento automaticamente do PRECOS
+// Estas são as referências VIVAS — serão atualizadas ao carregar preços do Sheets
 const TEM_MUSEU = Object.entries(PRECOS).filter(([,v])=>v.museu>0).map(([k])=>k);
 const TEM_GEX   = Object.entries(PRECOS).filter(([,v])=>v.gex>0).map(([k])=>k);
 const TEM_MAR   = Object.entries(PRECOS).filter(([,v])=>v.mar>0).map(([k])=>k);
@@ -387,14 +407,57 @@ function parseData(d){
   const dt=new Date(d);return isNaN(dt)?null:dt;
 }
 
-// ── CARREGAR ──
+// ── CARREGAR PREÇOS DO SHEETS ──
+async function carregarPrecos() {
+  if (PRECOS_GID === 'COLE_O_GID_DA_ABA_PRECOS') return; // ainda não configurado
+  try {
+    const res = await fetch(PRECOS_URL);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const txt = await res.text();
+    const rows = parseCSV(txt);
+    let atualizados = 0;
+    rows.forEach(r => {
+      const prod = (r['Produto'] || r['produto'] || '').trim();
+      if (!prod) return;
+      const aqua  = Number(r['Aqua']  || r['AQUA']  || r['aqua']  || 0);
+      const museu = Number(r['Museu'] || r['MUSEU'] || r['museu'] || 0);
+      const gex   = Number(r['GEX']   || r['gex']   || 0);
+      const mar   = Number(r['MAR']   || r['mar']   || 0);
+      const total = Number(r['Total'] || r['TOTAL'] || r['total'] || (aqua+museu+gex+mar));
+      PRECOS[prod] = { aqua, museu, gex, mar, total };
+      atualizados++;
+    });
+    // Rederiva as listas de pertencimento
+    TEM_MUSEU_DYN.length = 0; TEM_GEX_DYN.length = 0; TEM_MAR_DYN.length = 0;
+    Object.entries(PRECOS).forEach(([k,v]) => {
+      if(v.museu > 0) TEM_MUSEU_DYN.push(k);
+      if(v.gex   > 0) TEM_GEX_DYN.push(k);
+      if(v.mar   > 0) TEM_MAR_DYN.push(k);
+    });
+    console.log(`Preços carregados do Sheets: ${atualizados} produtos`);
+  } catch(e) {
+    console.warn('Não foi possível carregar preços do Sheets, usando tabela fixa.', e.message);
+  }
+}
+
+// Arrays dinâmicos derivados (inicializados com os valores fixos)
+const TEM_MUSEU_DYN = [...TEM_MUSEU];
+const TEM_GEX_DYN   = [...TEM_GEX];
+const TEM_MAR_DYN   = [...TEM_MAR];
+
+// ── CARREGAR DADOS ──
 async function carregar(){
   setLoad(true);
   try{
-    const res=await fetch(SHEET_URL);
-    if(!res.ok)throw new Error('HTTP '+res.status);
-    const txt=await res.text();
-    todos=parseCSV(txt).map(r=>{r._data=parseData(r['Data']);return r;}).filter(r=>r._data&&!isNaN(r._data));
+    // Carrega preços e vendas em paralelo
+    await Promise.all([
+      carregarPrecos(),
+      fetch(SHEET_URL).then(async res => {
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const txt = await res.text();
+        todos = parseCSV(txt).map(r=>{r._data=parseData(r['Data']);return r;}).filter(r=>r._data&&!isNaN(r._data));
+      })
+    ]);
     popVendFiltro();
     aplicar();
     document.getElementById('last-upd').textContent='Atualizado '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
@@ -439,8 +502,10 @@ function filtrar(recs,de,ate,vend,canal,cat,atr,tipo){
     if(atr&&r['Produto']!==atr)return false;
     if(tipo){
       const p=r['Produto'];
-      if(tipo==='museu_venda'&&!TEM_MUSEU.includes(p))return false;
-      if(tipo==='todas_atracoes'&&!(TEM_MUSEU.includes(p)&&TEM_GEX.includes(p)&&TEM_MAR.includes(p)))return false;
+      if(tipo==='museu'&&!TEM_MUSEU.includes(p))return false;
+      if(tipo==='gex'  &&!TEM_GEX.includes(p))  return false;
+      if(tipo==='mar'  &&!TEM_MAR.includes(p))   return false;
+      if(tipo==='aqua' &&!(PRECOS[p]&&PRECOS[p].aqua>0))return false;
     }
     return true;
   });
@@ -461,19 +526,19 @@ function aplicar(){
   try { renderCharts(at,de,ate,tipo); } catch(e) { console.error('renderCharts:',e); }
   try { renderTipoProduto(at,tipo); } catch(e) { console.error('renderTipoProduto:',e); }
   try { renderAtracao(at); } catch(e) { console.error('renderAtracao:',e); }
-  try { renderAtracaoVend(at); } catch(e) { console.error('renderAtracaoVend:',e); }
+  try { renderConvAtracao(at,a1); } catch(e) { console.error('renderConvAtracao:',e); }
   try { renderExpCompleta(at,tipo); } catch(e) { console.error('renderExpCompleta:',e); }
   try { renderRankingMuseu(at); } catch(e) { console.error('renderRankingMuseu:',e); }
   try { renderDetalhamento(at,tipo); } catch(e) { console.error('renderDetalhamento:',e); }
 }
 
-// ── VALOR DO REGISTRO: respeita filtro Só Museu ──
-// Quando tipo='museu_venda', usa parcela Museu da tabela PRECOS × Qtd
-// Caso contrário usa Total (valor integral da transação)
+// Valor do registro: quando filtro por atração específica, usa parcela dessa atração
 function valorReg(r, tipo) {
-  const p = PRECOS[r['Produto']] || {};
-  if (tipo === 'museu_venda') return (p.museu || 0) * (Number(r['Quantidade']) || 0);
-  return Number(r['Total']) || 0;
+  if(tipo==='museu') return parcelaAtr(r,'museu');
+  if(tipo==='gex')   return parcelaAtr(r,'gex');
+  if(tipo==='mar')   return parcelaAtr(r,'mar');
+  if(tipo==='aqua')  return parcelaAtr(r,'aqua');
+  return Number(r['Total'])||0;
 }
 // Parcela de uma atração específica
 function parcelaAtr(r, atr) {
@@ -511,42 +576,36 @@ function renderKPIs(at, a1, tipo) {
   kpiSet('k-ing',  fmtN(qAt), 'k-ing-a1',  qA1 > 0 ? fmtN(qA1)  : null, 'k-ing-v',  qA1 > 0 ? ((qAt - qA1) / qA1) * 100 : null);
   kpiSet('k-tkt',  fmt(tAt),  'k-tkt-a1',  tA1 > 0 ? fmt(tA1)   : null, 'k-tkt-v',  tA1 > 0 ? ((tAt - tA1) / tA1) * 100 : null);
 
-  // Meta
-  const metas = at.map(r => Number(r['Meta do Dia']) || 0).filter(m => m > 0);
-  const metaM = metas.length ? metas.reduce((a,b) => a+b, 0) / metas.length : 0;
-  const aAt   = metaM > 0 ? (vAt / metaM) * 100 : null;
-  const mA1   = a1.map(r => Number(r['Meta do Dia']) || 0).filter(m => m > 0);
-  const metaA1 = mA1.length ? mA1.reduce((a,b) => a+b, 0) / mA1.length : 0;
-  const aA1    = metaA1 > 0 ? (vA1 / metaA1) * 100 : null;
-  setEl('k-meta', aAt !== null ? aAt.toFixed(1) + '%' : '—');
-  if (aAt !== null && aA1 !== null) {
-    setEl('k-meta-a1', 'A-1: ' + aA1.toFixed(1) + '%');
-    const diff = aAt - aA1;
-    const el = document.getElementById('k-meta-v');
-    if (el) { el.className = 'kpi-var ' + (diff >= 0 ? 'up' : 'dn'); el.textContent = (diff >= 0 ? '+' : '') + diff.toFixed(1) + '%'; }
+  // PAX Aquário (soma do maior PAX por dia)
+  function calcPax(recs) {
+    const m={};
+    recs.forEach(r=>{const d=r._data.toISOString().split('T')[0];const p=Number(r['PAX Aquário'])||0;if(!m[d]||p>m[d])m[d]=p;});
+    return Object.values(m).reduce((a,b)=>a+b,0);
+  }
+  const paxAt = calcPax(at), paxA1 = calcPax(a1);
+  setEl('k-pax', fmtN(paxAt) || '—');
+  if(paxA1 > 0){
+    setEl('k-pax-a1','A-1: '+fmtN(paxA1));
+    const diff = paxAt > 0 ? ((paxAt - paxA1) / paxA1) * 100 : null;
+    if(diff !== null){
+      const el = document.getElementById('k-pax-v');
+      if(el){el.className='kpi-var '+(diff>=0?'up':'dn');el.textContent=(diff>=0?'+':'')+diff.toFixed(1)+'%';}
+    }
   }
 
-  // Conversão Museu
-  const diasPax = {};
-  at.forEach(r => {
-    const d = r._data.toISOString().split('T')[0];
-    const p = Number(r['PAX Aquário']) || 0;
-    if (!diasPax[d] || p > diasPax[d]) diasPax[d] = p;
-  });
-  const totalPax  = Object.values(diasPax).reduce((a,b) => a + b, 0);
-  const ingMuseu  = at.filter(r => TEM_MUSEU.includes(r['Produto'])).reduce((a,r) => a + (Number(r['Quantidade']) || 0), 0);
-  if (totalPax > 0) {
-    const convVal = ((ingMuseu / totalPax) * 100).toFixed(1) + '%';
-    setEl('k-conv', convVal);
-    setEl('k-conv-info', fmtN(ingMuseu) + ' ing ÷ ' + fmtN(totalPax) + ' PAX');
-    // Mobile: mostrar conversão dentro do card de meta
-    const mob = document.getElementById('k-conv-mobile');
-    if (mob) { mob.style.display = ''; mob.textContent = 'Conv: ' + convVal; }
-  } else {
-    setEl('k-conv', '—');
-    setEl('k-conv-info', 'Lance PAX no formulário');
-    const mob = document.getElementById('k-conv-mobile');
-    if (mob) mob.style.display = 'none';
+  // Conversão Museu com A-1
+  const ingMuseuAt = at.filter(r=>TEM_MUSEU.includes(r['Produto'])).reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
+  const ingMuseuA1 = a1.filter(r=>TEM_MUSEU.includes(r['Produto'])).reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
+  const convAt = paxAt > 0 ? (ingMuseuAt / paxAt) * 100 : null;
+  const convA1 = paxA1 > 0 ? (ingMuseuA1 / paxA1) * 100 : null;
+  setEl('k-conv', convAt !== null ? convAt.toFixed(1)+'%' : '—');
+  if(convA1 !== null){
+    setEl('k-conv-a1','A-1: '+convA1.toFixed(1)+'%');
+    if(convAt !== null){
+      const diff = convAt - convA1;
+      const el = document.getElementById('k-conv-v');
+      if(el){el.className='kpi-var '+(diff>=0?'up':'dn');el.textContent=(diff>=0?'+':'')+diff.toFixed(1)+'pp';}
+    }
   }
 }
 
@@ -558,6 +617,8 @@ const DL_BAR_H={anchor:'end',align:'right',color:'#10403B',font:{family:'Rajdhan
 
 function optsBarV(fmtFn){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{...DL_BAR,formatter:fmtFn||fmtN}},scales:{x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:10},color:'#4C5958'}},y:{display:false,grace:'20%'}},layout:{padding:{top:24}}};}
 function optsDoughnut(){return{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},dualabels:{display:false},datalabels:{color:'#fff',font:{family:'Rajdhani',size:10,weight:'600'},formatter:(v,ctx)=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);const p=tot>0?((v/tot)*100).toFixed(0):0;return p+'%';},display:ctx=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(ctx.dataset.data[ctx.dataIndex]/tot)>0.05;}}}};}
+// Donut para quantidade (sem legenda, mostra número absoluto)
+function optsDoughnutQtd(){return{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},datalabels:{color:'#fff',font:{family:'Rajdhani',size:10,weight:'600'},formatter:(v,ctx)=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);const p=tot>0?((v/tot)*100).toFixed(0):0;return p>5?p+'%':'';},display:ctx=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(ctx.dataset.data[ctx.dataIndex]/tot)>0.05;}}}};}
 
 function renderCharts(at,de,ate,tipo){
   // Vendas por vendedor
@@ -569,22 +630,48 @@ function renderCharts(at,de,ate,tipo){
   dc('vv');charts['vv']=new Chart(document.getElementById('ch-vv'),{type:'bar',data:{labels:vends,datasets:[{data:vends.map(v=>pv[v].val),backgroundColor:CORES,borderRadius:5,borderSkipped:false}]},options:optsBarV(fmt)});
   dc('vq');charts['vq']=new Chart(document.getElementById('ch-vq'),{type:'bar',data:{labels:vends,datasets:[{data:vends.map(v=>pv[v].qtd),backgroundColor:CORES.map(c=>c+'cc'),borderRadius:5,borderSkipped:false}]},options:optsBarV(fmtN)});
 
-  // Por tipo (avulso vs combo)
-  const tipos={Avulso:0,'Combo Duplo':0,'Combo Triplo':0,'Exp. Completa':0,Complementos:0};
+  // Por tipo — donut valor + donut qtd
+  const tiposVal={Avulso:0,'Combo Duplo':0,'Combo Triplo':0,'Exp. Completa':0,Complementos:0};
+  const tiposQtd={Avulso:0,'Combo Duplo':0,'Combo Triplo':0,'Exp. Completa':0,Complementos:0};
   const mapCat={'avulso':'Avulso','combo_duplo':'Combo Duplo','combo_triplo':'Combo Triplo','exp_completa':'Exp. Completa','complementos':'Complementos'};
-  at.forEach(r=>{const t=mapCat[r['Categoria']]||'Outros';if(tipos[t]!==undefined)tipos[t]+=valorReg(r,tipo);});
-  dc('tipo');charts['tipo']=new Chart(document.getElementById('ch-tipo'),{type:'doughnut',data:{labels:Object.keys(tipos).filter(k=>tipos[k]>0),datasets:[{data:Object.keys(tipos).filter(k=>tipos[k]>0).map(k=>tipos[k]),backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
+  at.forEach(r=>{const t=mapCat[r['Categoria']]||'Outros';if(tiposVal[t]!==undefined){tiposVal[t]+=valorReg(r,tipo);tiposQtd[t]+=(Number(r['Quantidade'])||0);}});
+  const labsTipo=Object.keys(tiposVal).filter(k=>tiposVal[k]>0);
+  dc('tipo');charts['tipo']=new Chart(document.getElementById('ch-tipo'),{type:'doughnut',data:{labels:labsTipo,datasets:[{data:labsTipo.map(k=>tiposVal[k]),backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
+  dc('tipo-qtd');charts['tipo-qtd']=new Chart(document.getElementById('ch-tipo-qtd'),{type:'doughnut',data:{labels:Object.keys(tiposQtd).filter(k=>tiposQtd[k]>0),datasets:[{data:Object.keys(tiposQtd).filter(k=>tiposQtd[k]>0).map(k=>tiposQtd[k]),backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnutQtd()});
 
-  // Por atração
-  const atrVals={Museu:0,GEX:0,MAR:0};
-  at.forEach(r=>{atrVals.Museu+=parcelaAtr(r,'museu');atrVals.GEX+=parcelaAtr(r,'gex');atrVals.MAR+=parcelaAtr(r,'mar');});
-  dc('atr');charts['atr']=new Chart(document.getElementById('ch-atr'),{type:'doughnut',data:{labels:['Museu','GEX','MAR'],datasets:[{data:[atrVals.Museu,atrVals.GEX,atrVals.MAR],backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
+  // Por atração — donut valor + donut qtd
+  const atrVal={Museu:0,GEX:0,MAR:0};
+  const atrQtd={Museu:0,GEX:0,MAR:0};
+  at.forEach(r=>{
+    atrVal.Museu+=parcelaAtr(r,'museu');atrVal.GEX+=parcelaAtr(r,'gex');atrVal.MAR+=parcelaAtr(r,'mar');
+    if(TEM_MUSEU.includes(r['Produto']))atrQtd.Museu+=Number(r['Quantidade'])||0;
+    if(TEM_GEX.includes(r['Produto']))  atrQtd.GEX+=Number(r['Quantidade'])||0;
+    if(TEM_MAR.includes(r['Produto']))  atrQtd.MAR+=Number(r['Quantidade'])||0;
+  });
+  dc('atr');charts['atr']=new Chart(document.getElementById('ch-atr'),{type:'doughnut',data:{labels:['Museu','GEX','MAR'],datasets:[{data:[atrVal.Museu,atrVal.GEX,atrVal.MAR],backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
+  dc('atr-qtd');charts['atr-qtd']=new Chart(document.getElementById('ch-atr-qtd'),{type:'doughnut',data:{labels:['Museu','GEX','MAR'],datasets:[{data:[atrQtd.Museu,atrQtd.GEX,atrQtd.MAR],backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnutQtd()});
 
-  // Meta por dia
-  const dm={};at.forEach(r=>{const d=r._data.toISOString().split('T')[0];if(!dm[d])dm[d]={val:0,meta:0};dm[d].val+=valorReg(r,tipo);const m=Number(r['Meta do Dia'])||0;if(m>dm[d].meta)dm[d].meta=m;});
-  const dias=Object.keys(dm).sort();
-  if(dias.length>8)document.getElementById('w-meta').style.width=(dias.length*60)+'px';
-  dc('meta');charts['meta']=new Chart(document.getElementById('ch-meta'),{type:'bar',data:{labels:dias.map(d=>{const[,m,dd]=d.split('-');return`${dd}/${m}`;}),datasets:[{label:'Vendas',data:dias.map(d=>dm[d].val),backgroundColor:CORES[0]+'66',borderRadius:4,borderSkipped:false,order:2,datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:8,weight:'600'},formatter:v=>v>=1000?'R$'+(v/1000).toFixed(1)+'k':fmt(v),rotation:-45}},{label:'Meta',data:dias.map(d=>dm[d].meta),type:'line',borderColor:'#8AA6A3',backgroundColor:'transparent',borderWidth:2,pointRadius:3,pointBackgroundColor:'#8AA6A3',tension:0.3,order:1,datalabels:{display:false}}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},datalabels:{},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.raw)}}},scales:{x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:9},color:'#4C5958',maxRotation:45}},y:{display:false,grace:'15%'}},layout:{padding:{top:28}}}});
+  // Vendas A0 vs A1 por dia
+  const dmA0={};at.forEach(r=>{const d=r._data.toISOString().split('T')[0];if(!dmA0[d])dmA0[d]=0;dmA0[d]+=valorReg(r,tipo);});
+  // A1: usar registros do ano anterior com data deslocada para o mesmo dia corrente
+  const a1Recs=filtrar(todos,...getA1([de,ate]),document.getElementById('f-vend').value,document.getElementById('f-canal').value,document.getElementById('f-cat').value,document.getElementById('f-atr').value,tipo);
+  const dmA1={};a1Recs.forEach(r=>{const d=new Date(r._data.getTime()+365*864e5).toISOString().split('T')[0];if(!dmA1[d])dmA1[d]=0;dmA1[d]+=valorReg(r,tipo);});
+  const diasSet=new Set([...Object.keys(dmA0),...Object.keys(dmA1)]);
+  const dias=[...diasSet].sort();
+  if(dias.length>8)document.getElementById('w-meta').style.width=(dias.length*56)+'px';
+  dc('meta');charts['meta']=new Chart(document.getElementById('ch-meta'),{
+    type:'bar',
+    data:{
+      labels:dias.map(d=>{const[,m,dd]=d.split('-');return`${dd}/${m}`;}),
+      datasets:[
+        {label:'Ano Atual',data:dias.map(d=>dmA0[d]||0),backgroundColor:CORES[0]+'cc',borderRadius:4,borderSkipped:false,
+          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:8,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}},
+        {label:'Ano Anterior',data:dias.map(d=>dmA1[d]||0),backgroundColor:CORES[1]+'cc',borderRadius:4,borderSkipped:false,
+          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:8,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},datalabels:{},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.raw)}}},scales:{x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:9},color:'#4C5958',maxRotation:45}},y:{display:false,grace:'20%'}},layout:{padding:{top:28}}}
+  });
 }
 
 // ── ANÁLISE TIPO PRODUTO ──
@@ -643,6 +730,55 @@ function renderAtracaoVend(at){
   Object.entries(por).sort((a,b)=>b[1].museu-a[1].museu).forEach(([v,d])=>{
     const tr = document.createElement('tr');
     tr.innerHTML = `<td style="font-weight:600">${v}</td><td class="r val-g">${fmt(d.museu)}</td><td class="r">${fmt(d.gex)}</td><td class="r">${fmt(d.mar)}</td><td class="r">${pct(d.museu,totalMuseuTime)}</td>`;
+    tb.appendChild(tr);
+  });
+}
+
+// ── CONVERSÃO POR ATRAÇÃO ──
+// Museu: ingressos Museu ÷ PAX Aquário
+// GEX:   PAX GEX ÷ PAX Aquário
+// MAR:   PAX MAR ÷ PAX Aquário
+function renderConvAtracao(at, a1) {
+  // Calcular PAX por dia (pegar o maior valor lançado no dia)
+  function calcPaxDia(recs, campo) {
+    const m={};
+    recs.forEach(r=>{
+      const d=r._data.toISOString().split('T')[0];
+      const v=Number(r[campo])||0;
+      if(v>0 && (!m[d]||v>m[d])) m[d]=v;
+    });
+    return Object.values(m).reduce((a,b)=>a+b,0);
+  }
+
+  const paxAq  = calcPaxDia(at,'PAX Aquário');
+  const paxAqA1= calcPaxDia(a1,'PAX Aquário');
+  const paxGex = calcPaxDia(at,'PAX GEX');
+  const paxMar = calcPaxDia(at,'PAX MAR');
+
+  const ingMuseu = at.filter(r=>TEM_MUSEU.includes(r['Produto'])).reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
+  const ingMuseuA1 = a1.filter(r=>TEM_MUSEU.includes(r['Produto'])).reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
+
+  const convMuseu = paxAq > 0 ? (ingMuseu / paxAq * 100) : null;
+  const convGex   = paxAq > 0 && paxGex > 0 ? (paxGex / paxAq * 100) : null;
+  const convMar   = paxAq > 0 && paxMar > 0 ? (paxMar / paxAq * 100) : null;
+  const convMuseuA1 = paxAqA1 > 0 ? (ingMuseuA1 / paxAqA1 * 100) : null;
+
+  const linhas = [
+    { label:'Museu', pax: fmtN(ingMuseu), paxAq: fmtN(paxAq), conv: convMuseu, convA1: convMuseuA1 },
+    { label:'GEX',   pax: fmtN(paxGex)||'—', paxAq: fmtN(paxAq), conv: convGex,   convA1: null },
+    { label:'MAR',   pax: fmtN(paxMar)||'—', paxAq: fmtN(paxAq), conv: convMar,   convA1: null },
+  ];
+
+  const tb = document.getElementById('tbl-conv-atr-body'); tb.innerHTML='';
+  linhas.forEach(l=>{
+    const convStr = l.conv !== null ? l.conv.toFixed(1)+'%' : '—';
+    const a1Str   = l.convA1 !== null ? `<small style="color:var(--mu2);display:block">A-1: ${l.convA1.toFixed(1)}%</small>` : '';
+    const diffEl  = (l.conv!==null && l.convA1!==null) ? (() => {
+      const d=l.conv-l.convA1; const cls=d>=0?'up':'dn';
+      return `<small class="kpi-var ${cls}" style="font-size:9px">${d>=0?'+':''}${d.toFixed(1)}pp</small>`;
+    })() : '';
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td style="font-weight:600">${l.label}</td><td class="r">${l.pax}</td><td class="r">${l.paxAq}</td><td class="r">${convStr}${a1Str}${diffEl}</td>`;
     tb.appendChild(tr);
   });
 }
