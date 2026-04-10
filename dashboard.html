@@ -337,7 +337,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="card">
     <div class="sec-title">Conversão PAX por Atração</div>
     <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col><col style="width:64px"><col style="width:64px"><col style="width:90px"></colgroup>
+      <colgroup><col><col style="width:56px"><col style="width:56px"><col style="width:120px"></colgroup>
       <thead><tr><th>Atração</th><th class="r">PAX / Ing.</th><th class="r">PAX Aquá.</th><th class="r">Conv.%</th></tr></thead>
       <tbody id="tbl-pax-conv-body"></tbody>
     </table></div>
@@ -986,7 +986,7 @@ function renderPaxConv(at, a1) {
   linhas.forEach(l => {
     const vTag = varTag(l.conv, l.convA1);
     const a1Str = l.convA1 !== '—'
-      ? `<span style="color:var(--mu2);font-size:9px">A-1: ${l.convA1} ${vTag}</span>`
+      ? `<div style="color:var(--mu2);font-size:9px;margin-top:2px">A-1: ${l.convA1} ${vTag}</div>`
       : '';
     const tr = document.createElement('tr');
     tr.innerHTML = `
@@ -997,8 +997,11 @@ function renderPaxConv(at, a1) {
       <td class="r" style="font-weight:500">${l.pax}</td>
       <td class="r" style="font-weight:500">${l.paxAq}</td>
       <td class="r">
-        <div style="font-weight:700;color:var(--g);font-size:14px">${l.conv}</div>
-        <div style="margin-top:2px">${a1Str}</div>
+        <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px">
+          <span style="font-weight:700;color:var(--g);font-size:14px">${l.conv}</span>
+          ${vTag}
+        </div>
+        <div style="text-align:right;color:var(--mu2);font-size:9px;margin-top:1px">${l.convA1 !== '—' ? 'A-1: '+l.convA1 : ''}</div>
       </td>`;
     tb.appendChild(tr);
   });
