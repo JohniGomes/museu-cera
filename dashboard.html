@@ -55,15 +55,21 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 .kpi-var.ne{background:var(--bg);color:var(--mu)}
 
 /* GRID CHARTS */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-bottom:20px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px}
 .g1{margin-bottom:20px}
-.card{background:var(--white);border-radius:14px;padding:18px;border:1px solid var(--bd);box-shadow:0 1px 8px rgba(0,0,0,0.04)}
-.ch{position:relative;height:200px}
-.ch-tall{position:relative;height:250px}
+.card{background:var(--white);border-radius:14px;padding:18px;border:1px solid var(--bd);box-shadow:0 1px 8px rgba(0,0,0,0.04);box-sizing:border-box;min-width:0;overflow:hidden}
+.ch{position:relative;height:200px;width:100%}
+.ch-tall{position:relative;height:250px;width:100%}
 .ch-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
 .ch-scroll::-webkit-scrollbar{height:3px}
 .ch-scroll::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:2px}
+
+/* Card donut duplo — altura auto para acomodar legenda */
+.donut-pair{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
+.donut-wrap{display:flex;flex-direction:column;align-items:center;min-width:0;width:100%}
+.donut-lbl{font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em}
+.donut-ch{position:relative;width:100%;height:140px}
 
 /* TABELA */
 .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%}
@@ -88,27 +94,25 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 
 /* GRID TABELAS 3+3 */
 .tbl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:20px}
-.tbl-grid .card{margin-bottom:0;overflow:visible}
+.tbl-grid .card{margin-bottom:0}
 
 /* RANKING — número visível */
-.rank-num{font-weight:700;color:var(--mu);font-size:12px;overflow:visible;display:inline-block}
+.rank-num{font-weight:700;color:var(--mu);font-size:12px;display:inline-block}
 
 /* MOBILE */
 @media(max-width:1000px){.tbl-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:900px){.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.g3{grid-template-columns:repeat(2,minmax(0,1fr))}.donut-pair{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){
-  /* Filtros mobile: grupo a grupo em linha */
   .flt{justify-content:flex-start;padding:8px 12px;gap:6px}
   .flt-grp{flex:1 1 calc(50% - 6px);min-width:0}
   .flt-grp select,.flt-grp input{width:100%;max-width:100%;font-size:12px}
   .flt-sep{display:none}
   .btn-ref{width:100%;justify-content:center;margin-top:2px}
-  /* KPI 2x2 em mobile — ocultar Conversão */
   .kpi-grid{grid-template-columns:1fr 1fr}
   .kpi-conv-mobile{display:none}
-  /* Meta + Conversão juntos num card único */
   .kpi-meta-mobile{grid-column:1 / -1}
-  .g2,.g3{grid-template-columns:1fr}
+  .g2,.g3{grid-template-columns:minmax(0,1fr)}
+  .donut-pair{grid-template-columns:1fr 1fr}
   .tbl-grid{grid-template-columns:minmax(0,1fr)}
   .page{padding:14px 10px 60px}
 }
@@ -210,27 +214,27 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 <div class="g2">
   <div class="card">
     <div class="sec-title">Por Tipo de Venda</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start">
-      <div>
-        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Valor R$</div>
-        <div style="position:relative;height:160px"><canvas id="ch-tipo"></canvas></div>
+    <div class="donut-pair">
+      <div class="donut-wrap">
+        <div class="donut-lbl">Valor R$</div>
+        <div class="donut-ch"><canvas id="ch-tipo"></canvas></div>
       </div>
-      <div>
-        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Quantidade</div>
-        <div style="position:relative;height:160px"><canvas id="ch-tipo-qtd"></canvas></div>
+      <div class="donut-wrap">
+        <div class="donut-lbl">Quantidade</div>
+        <div class="donut-ch"><canvas id="ch-tipo-qtd"></canvas></div>
       </div>
     </div>
   </div>
   <div class="card">
     <div class="sec-title">Por Atração</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start">
-      <div>
-        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Valor R$</div>
-        <div style="position:relative;height:160px"><canvas id="ch-atr"></canvas></div>
+    <div class="donut-pair">
+      <div class="donut-wrap">
+        <div class="donut-lbl">Valor R$</div>
+        <div class="donut-ch"><canvas id="ch-atr"></canvas></div>
       </div>
-      <div>
-        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Quantidade</div>
-        <div style="position:relative;height:160px"><canvas id="ch-atr-qtd"></canvas></div>
+      <div class="donut-wrap">
+        <div class="donut-lbl">Quantidade</div>
+        <div class="donut-ch"><canvas id="ch-atr-qtd"></canvas></div>
       </div>
     </div>
   </div>
@@ -641,9 +645,23 @@ const DL_BAR={anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',s
 const DL_BAR_H={anchor:'end',align:'right',color:'#10403B',font:{family:'Rajdhani',size:10,weight:'600'},clip:false,formatter:v=>fmt(v)};
 
 function optsBarV(fmtFn){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{...DL_BAR,formatter:fmtFn||fmtN}},scales:{x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:10},color:'#4C5958'}},y:{display:false,grace:'20%'}},layout:{padding:{top:24}}};}
-function optsDoughnut(){return{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},dualabels:{display:false},datalabels:{color:'#fff',font:{family:'Rajdhani',size:10,weight:'600'},formatter:(v,ctx)=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);const p=tot>0?((v/tot)*100).toFixed(0):0;return p+'%';},display:ctx=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(ctx.dataset.data[ctx.dataIndex]/tot)>0.05;}}}};}
-// Donut para quantidade — mostra número absoluto dentro de cada fatia
-function optsDoughnutQtd(){return{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},datalabels:{color:'#fff',font:{family:'Rajdhani',size:11,weight:'600'},formatter:(v,ctx)=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(v/tot)>0.05?fmtN(v):'';},display:ctx=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(ctx.dataset.data[ctx.dataIndex]/tot)>0.05;}}}};}
+
+const _legendOpts = {position:'bottom',labels:{font:{family:'Rajdhani',size:9},boxWidth:8,padding:5,color:'#10403B'}};
+const _dlBase = {color:'#fff',font:{family:'Rajdhani',size:9,weight:'600'}};
+const _dlDisplay = ctx=>{const t=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return t>0&&(ctx.dataset.data[ctx.dataIndex]/t)>0.06;};
+
+function optsDoughnut(){
+  return{responsive:true,maintainAspectRatio:false,cutout:'52%',layout:{padding:0},
+    plugins:{legend:_legendOpts,datalabels:{..._dlBase,
+      formatter:(v,ctx)=>{const t=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);const p=t>0?((v/t)*100).toFixed(0):0;return Number(p)>6?p+'%':'';},
+      display:_dlDisplay}}};
+}
+function optsDoughnutQtd(){
+  return{responsive:true,maintainAspectRatio:false,cutout:'52%',layout:{padding:0},
+    plugins:{legend:_legendOpts,datalabels:{..._dlBase,
+      formatter:(v,ctx)=>{const t=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return t>0&&(v/t)>0.06?fmtN(v):'';},
+      display:_dlDisplay}}};
+}
 
 function renderCharts(at,de,ate,tipo){
   // Vendas por vendedor
