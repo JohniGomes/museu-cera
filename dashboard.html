@@ -337,7 +337,7 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
   <div class="card">
     <div class="sec-title">Conversão PAX por Atração</div>
     <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col><col style="width:64px"><col style="width:64px"><col style="width:56px"></colgroup>
+      <colgroup><col><col style="width:64px"><col style="width:64px"><col style="width:90px"></colgroup>
       <thead><tr><th>Atração</th><th class="r">PAX / Ing.</th><th class="r">PAX Aquá.</th><th class="r">Conv.%</th></tr></thead>
       <tbody id="tbl-pax-conv-body"></tbody>
     </table></div>
@@ -952,7 +952,7 @@ function renderPaxConv(at, a1) {
     if (!v || !v1 || v==='—' || v1==='—') return '';
     const d = parseFloat(v) - parseFloat(v1);
     const cls = d >= 0 ? 'up' : 'dn';
-    return `<span class="kpi-var ${cls}" style="font-size:9px;margin-left:4px">${d>=0?'+':''}${d.toFixed(1)}%</span>`;
+    return `<span class="kpi-var ${cls}" style="font-size:9px">${d>=0?'+':''}${d.toFixed(1)}%</span>`;
   };
 
   const linhas = [
@@ -966,7 +966,7 @@ function renderPaxConv(at, a1) {
     },
     {
       label: 'GEX',
-      pax:   fmtN(paxGex) || '—',
+      pax:   paxGex > 0 ? fmtN(paxGex) : '—',
       paxAq: fmtN(paxAq),
       conv:  conv(paxGex, paxAq),
       convA1:conv(paxGexA1, paxAqA1),
@@ -974,7 +974,7 @@ function renderPaxConv(at, a1) {
     },
     {
       label: 'MAR',
-      pax:   fmtN(paxMar) || '—',
+      pax:   paxMar > 0 ? fmtN(paxMar) : '—',
       paxAq: fmtN(paxAq),
       conv:  conv(paxMar, paxAq),
       convA1:conv(paxMarA1, paxAqA1),
@@ -985,17 +985,20 @@ function renderPaxConv(at, a1) {
   const tb = document.getElementById('tbl-pax-conv-body'); tb.innerHTML = '';
   linhas.forEach(l => {
     const vTag = varTag(l.conv, l.convA1);
-    const a1Str = l.convA1 !== '—' ? `<small style="display:block;color:var(--mu2);font-size:9px">A-1: ${l.convA1}</small>` : '';
+    const a1Str = l.convA1 !== '—'
+      ? `<span style="color:var(--mu2);font-size:9px">A-1: ${l.convA1} ${vTag}</span>`
+      : '';
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>
         <div style="font-weight:600">${l.label}</div>
         <div style="font-size:9px;color:var(--mu2)">${l.desc}</div>
       </td>
-      <td class="r">${l.pax}</td>
-      <td class="r">${l.paxAq}</td>
+      <td class="r" style="font-weight:500">${l.pax}</td>
+      <td class="r" style="font-weight:500">${l.paxAq}</td>
       <td class="r">
-        <span style="font-weight:600;color:var(--g)">${l.conv}</span>${vTag}${a1Str}
+        <div style="font-weight:700;color:var(--g);font-size:14px">${l.conv}</div>
+        <div style="margin-top:2px">${a1Str}</div>
       </td>`;
     tb.appendChild(tr);
   });
