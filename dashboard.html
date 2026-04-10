@@ -210,16 +210,28 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
 <div class="g2">
   <div class="card">
     <div class="sec-title">Por Tipo de Venda</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Valor R$</div><div class="ch"><canvas id="ch-tipo"></canvas></div></div>
-      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Quantidade</div><div class="ch"><canvas id="ch-tipo-qtd"></canvas></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start">
+      <div>
+        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Valor R$</div>
+        <div style="position:relative;height:160px"><canvas id="ch-tipo"></canvas></div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Quantidade</div>
+        <div style="position:relative;height:160px"><canvas id="ch-tipo-qtd"></canvas></div>
+      </div>
     </div>
   </div>
   <div class="card">
     <div class="sec-title">Por Atração</div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Valor R$</div><div class="ch"><canvas id="ch-atr"></canvas></div></div>
-      <div><div style="font-size:10px;color:var(--mu2);text-align:center;margin-bottom:4px">Quantidade</div><div class="ch"><canvas id="ch-atr-qtd"></canvas></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;align-items:start">
+      <div>
+        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Valor R$</div>
+        <div style="position:relative;height:160px"><canvas id="ch-atr"></canvas></div>
+      </div>
+      <div>
+        <div style="font-size:9px;color:var(--mu2);text-align:center;margin-bottom:4px;text-transform:uppercase;letter-spacing:.04em">Quantidade</div>
+        <div style="position:relative;height:160px"><canvas id="ch-atr-qtd"></canvas></div>
+      </div>
     </div>
   </div>
 </div>
@@ -249,12 +261,25 @@ body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;mi
     </table></div>
   </div>
   <div class="card">
-    <div class="sec-title">Conversão por Atração</div>
-    <div class="tbl-wrap"><table class="tbl">
-      <colgroup><col><col style="width:60px"><col style="width:60px"><col style="width:56px"></colgroup>
-      <thead><tr><th>Atração</th><th class="r">PAX</th><th class="r">PAX Aquá.</th><th class="r">Conv.%</th></tr></thead>
-      <tbody id="tbl-conv-atr-body"></tbody>
-    </table></div>
+    <div class="sec-title">Conversão por Atração · por Vendedor</div>
+    <div class="tbl-wrap">
+      <table class="tbl" style="min-width:520px">
+        <thead>
+          <tr>
+            <th rowspan="2">Vendedor</th>
+            <th colspan="3" style="text-align:center;border-left:1px solid var(--bd)">Museu</th>
+            <th colspan="3" style="text-align:center;border-left:1px solid var(--bd)">GEX</th>
+            <th colspan="3" style="text-align:center;border-left:1px solid var(--bd)">MAR</th>
+          </tr>
+          <tr>
+            <th class="r" style="border-left:1px solid var(--bd)">Qtd</th><th class="r">R$</th><th class="r">%</th>
+            <th class="r" style="border-left:1px solid var(--bd)">Qtd</th><th class="r">R$</th><th class="r">%</th>
+            <th class="r" style="border-left:1px solid var(--bd)">Qtd</th><th class="r">R$</th><th class="r">%</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-conv-atr-body"></tbody>
+      </table>
+    </div>
   </div>
 </div>
 
@@ -604,7 +629,7 @@ function renderKPIs(at, a1, tipo) {
     if(convAt !== null){
       const diff = convAt - convA1;
       const el = document.getElementById('k-conv-v');
-      if(el){el.className='kpi-var '+(diff>=0?'up':'dn');el.textContent=(diff>=0?'+':'')+diff.toFixed(1)+'pp';}
+      if(el){el.className='kpi-var '+(diff>=0?'up':'dn');el.textContent=(diff>=0?'+':'')+diff.toFixed(1)+'%';}
     }
   }
 }
@@ -617,8 +642,8 @@ const DL_BAR_H={anchor:'end',align:'right',color:'#10403B',font:{family:'Rajdhan
 
 function optsBarV(fmtFn){return{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},datalabels:{...DL_BAR,formatter:fmtFn||fmtN}},scales:{x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:10},color:'#4C5958'}},y:{display:false,grace:'20%'}},layout:{padding:{top:24}}};}
 function optsDoughnut(){return{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{position:'bottom',labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},dualabels:{display:false},datalabels:{color:'#fff',font:{family:'Rajdhani',size:10,weight:'600'},formatter:(v,ctx)=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);const p=tot>0?((v/tot)*100).toFixed(0):0;return p+'%';},display:ctx=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(ctx.dataset.data[ctx.dataIndex]/tot)>0.05;}}}};}
-// Donut para quantidade (sem legenda, mostra número absoluto)
-function optsDoughnutQtd(){return{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},datalabels:{color:'#fff',font:{family:'Rajdhani',size:10,weight:'600'},formatter:(v,ctx)=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);const p=tot>0?((v/tot)*100).toFixed(0):0;return p>5?p+'%':'';},display:ctx=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(ctx.dataset.data[ctx.dataIndex]/tot)>0.05;}}}};}
+// Donut para quantidade — mostra número absoluto dentro de cada fatia
+function optsDoughnutQtd(){return{responsive:true,maintainAspectRatio:false,cutout:'55%',plugins:{legend:{display:false},datalabels:{color:'#fff',font:{family:'Rajdhani',size:11,weight:'600'},formatter:(v,ctx)=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(v/tot)>0.05?fmtN(v):'';},display:ctx=>{const tot=ctx.chart.data.datasets[0].data.reduce((a,b)=>a+b,0);return tot>0&&(ctx.dataset.data[ctx.dataIndex]/tot)>0.05;}}}};}
 
 function renderCharts(at,de,ate,tipo){
   // Vendas por vendedor
@@ -664,13 +689,27 @@ function renderCharts(at,de,ate,tipo){
     data:{
       labels:dias.map(d=>{const[,m,dd]=d.split('-');return`${dd}/${m}`;}),
       datasets:[
-        {label:'Ano Atual',data:dias.map(d=>dmA0[d]||0),backgroundColor:CORES[0]+'cc',borderRadius:4,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:8,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}},
-        {label:'Ano Anterior',data:dias.map(d=>dmA1[d]||0),backgroundColor:CORES[1]+'cc',borderRadius:4,borderSkipped:false,
-          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:8,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}}
+        {label:'Ano Atual',data:dias.map(d=>dmA0[d]||0),backgroundColor:CORES[0]+'cc',borderRadius:3,borderSkipped:false,
+          datalabels:{anchor:'end',align:'end',color:'#10403B',font:{family:'Rajdhani',size:7,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}},
+        {label:'Ano Anterior',data:dias.map(d=>dmA1[d]||0),backgroundColor:CORES[1]+'99',borderRadius:3,borderSkipped:false,
+          datalabels:{anchor:'end',align:'end',color:'#4C5958',font:{family:'Rajdhani',size:7,weight:'600'},formatter:v=>v>0?'R$'+(v/1000).toFixed(1)+'k':'',rotation:-45}}
       ]
     },
-    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},datalabels:{},tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.raw)}}},scales:{x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:9},color:'#4C5958',maxRotation:45}},y:{display:false,grace:'20%'}},layout:{padding:{top:28}}}
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{labels:{font:{family:'Rajdhani',size:11},boxWidth:10,color:'#10403B'}},
+        datalabels:{},
+        tooltip:{callbacks:{label:c=>c.dataset.label+': '+fmt(c.raw)}}
+      },
+      scales:{
+        x:{grid:{display:false},ticks:{font:{family:'Rajdhani',size:9},color:'#4C5958',maxRotation:45}},
+        y:{display:false,grace:'25%'}
+      },
+      layout:{padding:{top:32}},
+      barPercentage:0.85,
+      categoryPercentage:0.7
+    }
   });
 }
 
@@ -734,53 +773,59 @@ function renderAtracaoVend(at){
   });
 }
 
-// ── CONVERSÃO POR ATRAÇÃO ──
-// Museu: ingressos Museu ÷ PAX Aquário
-// GEX:   PAX GEX ÷ PAX Aquário
-// MAR:   PAX MAR ÷ PAX Aquário
+// ── CONVERSÃO POR ATRAÇÃO · POR VENDEDOR ──
+// Linhas: vendedores | Colunas: Museu (Qtd, R$, %) | GEX (Qtd, R$, %) | MAR (Qtd, R$, %)
+// % = Qtd atração do vendedor ÷ total Qtd atração de todo o time
 function renderConvAtracao(at, a1) {
-  // Calcular PAX por dia (pegar o maior valor lançado no dia)
-  function calcPaxDia(recs, campo) {
-    const m={};
-    recs.forEach(r=>{
-      const d=r._data.toISOString().split('T')[0];
-      const v=Number(r[campo])||0;
-      if(v>0 && (!m[d]||v>m[d])) m[d]=v;
-    });
-    return Object.values(m).reduce((a,b)=>a+b,0);
-  }
+  const por = {};
+  at.forEach(r => {
+    const v = r['Vendedor'] || 'S/N';
+    if (!por[v]) por[v] = {
+      museu: {qtd:0, val:0}, gex: {qtd:0, val:0}, mar: {qtd:0, val:0}
+    };
+    const q = Number(r['Quantidade']) || 0;
+    if (TEM_MUSEU.includes(r['Produto'])) { por[v].museu.qtd += q; por[v].museu.val += parcelaAtr(r,'museu'); }
+    if (TEM_GEX.includes(r['Produto']))   { por[v].gex.qtd   += q; por[v].gex.val   += parcelaAtr(r,'gex'); }
+    if (TEM_MAR.includes(r['Produto']))   { por[v].mar.qtd   += q; por[v].mar.val   += parcelaAtr(r,'mar'); }
+  });
 
-  const paxAq  = calcPaxDia(at,'PAX Aquário');
-  const paxAqA1= calcPaxDia(a1,'PAX Aquário');
-  const paxGex = calcPaxDia(at,'PAX GEX');
-  const paxMar = calcPaxDia(at,'PAX MAR');
+  // Totais do time por atração
+  const totMuseu = Object.values(por).reduce((a,b) => a + b.museu.qtd, 0);
+  const totGex   = Object.values(por).reduce((a,b) => a + b.gex.qtd,   0);
+  const totMar   = Object.values(por).reduce((a,b) => a + b.mar.qtd,   0);
 
-  const ingMuseu = at.filter(r=>TEM_MUSEU.includes(r['Produto'])).reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
-  const ingMuseuA1 = a1.filter(r=>TEM_MUSEU.includes(r['Produto'])).reduce((a,r)=>a+(Number(r['Quantidade'])||0),0);
+  const tb = document.getElementById('tbl-conv-atr-body'); tb.innerHTML = '';
 
-  const convMuseu = paxAq > 0 ? (ingMuseu / paxAq * 100) : null;
-  const convGex   = paxAq > 0 && paxGex > 0 ? (paxGex / paxAq * 100) : null;
-  const convMar   = paxAq > 0 && paxMar > 0 ? (paxMar / paxAq * 100) : null;
-  const convMuseuA1 = paxAqA1 > 0 ? (ingMuseuA1 / paxAqA1 * 100) : null;
-
-  const linhas = [
-    { label:'Museu', pax: fmtN(ingMuseu), paxAq: fmtN(paxAq), conv: convMuseu, convA1: convMuseuA1 },
-    { label:'GEX',   pax: fmtN(paxGex)||'—', paxAq: fmtN(paxAq), conv: convGex,   convA1: null },
-    { label:'MAR',   pax: fmtN(paxMar)||'—', paxAq: fmtN(paxAq), conv: convMar,   convA1: null },
-  ];
-
-  const tb = document.getElementById('tbl-conv-atr-body'); tb.innerHTML='';
-  linhas.forEach(l=>{
-    const convStr = l.conv !== null ? l.conv.toFixed(1)+'%' : '—';
-    const a1Str   = l.convA1 !== null ? `<small style="color:var(--mu2);display:block">A-1: ${l.convA1.toFixed(1)}%</small>` : '';
-    const diffEl  = (l.conv!==null && l.convA1!==null) ? (() => {
-      const d=l.conv-l.convA1; const cls=d>=0?'up':'dn';
-      return `<small class="kpi-var ${cls}" style="font-size:9px">${d>=0?'+':''}${d.toFixed(1)}pp</small>`;
-    })() : '';
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td style="font-weight:600">${l.label}</td><td class="r">${l.pax}</td><td class="r">${l.paxAq}</td><td class="r">${convStr}${a1Str}${diffEl}</td>`;
+  // Linhas por vendedor — ordenado por museu desc
+  Object.entries(por).sort((a,b) => b[1].museu.qtd - a[1].museu.qtd).forEach(([v,d]) => {
+    const tr = document.createElement('tr');
+    const cel = (atr, tot) => {
+      const q = d[atr].qtd, r = d[atr].val;
+      const p = tot > 0 ? (q / tot * 100).toFixed(1) + '%' : '—';
+      return `<td class="r" style="border-left:1px solid var(--bd)">${fmtN(q)}</td><td class="r val-g">${fmt(r)}</td><td class="r">${p}</td>`;
+    };
+    tr.innerHTML = `<td style="font-weight:600">${v}</td>${cel('museu',totMuseu)}${cel('gex',totGex)}${cel('mar',totMar)}`;
     tb.appendChild(tr);
   });
+
+  // Linha de totais
+  const totValMuseu = Object.values(por).reduce((a,b) => a + b.museu.val, 0);
+  const totValGex   = Object.values(por).reduce((a,b) => a + b.gex.val,   0);
+  const totValMar   = Object.values(por).reduce((a,b) => a + b.mar.val,   0);
+  const tTr = document.createElement('tr');
+  tTr.style.borderTop = '2px solid var(--bd)';
+  tTr.innerHTML = `
+    <td style="font-weight:600;border-top:2px solid var(--bd)">Total</td>
+    <td class="r" style="border-left:1px solid var(--bd);border-top:2px solid var(--bd);font-weight:600">${fmtN(totMuseu)}</td>
+    <td class="r val-g" style="border-top:2px solid var(--bd);font-weight:600">${fmt(totValMuseu)}</td>
+    <td class="r" style="border-top:2px solid var(--bd)">100%</td>
+    <td class="r" style="border-left:1px solid var(--bd);border-top:2px solid var(--bd);font-weight:600">${fmtN(totGex)}</td>
+    <td class="r val-g" style="border-top:2px solid var(--bd);font-weight:600">${fmt(totValGex)}</td>
+    <td class="r" style="border-top:2px solid var(--bd)">100%</td>
+    <td class="r" style="border-left:1px solid var(--bd);border-top:2px solid var(--bd);font-weight:600">${fmtN(totMar)}</td>
+    <td class="r val-g" style="border-top:2px solid var(--bd);font-weight:600">${fmt(totValMar)}</td>
+    <td class="r" style="border-top:2px solid var(--bd)">100%</td>`;
+  tb.appendChild(tTr);
 }
 
 // ── EXP COMPLETA + 3 PASSEIOS ──
