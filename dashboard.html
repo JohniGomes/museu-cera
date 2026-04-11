@@ -357,6 +357,9 @@ const PRECOS_URL  = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?f
 Chart.register(ChartDataLabels);
 
 const CORES = ['#127369','#8AA6A3','#4C5958','#10403B','#6B9E9A','#2E6B65','#A8C5C2','#1A5550'];
+// Paleta viva para os gráficos de donut
+const CORES_DONUT_TIPO = ['#F97316','#3B82F6','#A855F7','#EF4444','#10B981'];
+const CORES_DONUT_ATR  = ['#F59E0B','#6366F1','#EC4899'];
 const fmt   = v => 'R$ ' + Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtN  = v => Number(v).toLocaleString('pt-BR');
 const pct   = (a,b) => b > 0 ? ((a/b)*100).toFixed(1)+'%' : '—';
@@ -707,8 +710,8 @@ function renderCharts(at,de,ate,tipo){
   const mapCat={'avulso':'Avulso','combo_duplo':'Combo Duplo','combo_triplo':'Combo Triplo','exp_completa':'Exp. Completa','complementos':'Complementos'};
   at.forEach(r=>{const t=mapCat[r['Categoria']]||'Outros';if(tiposVal[t]!==undefined){tiposVal[t]+=valorReg(r,tipo);tiposQtd[t]+=(Number(r['Quantidade'])||0);}});
   const labsTipo=Object.keys(tiposVal).filter(k=>tiposVal[k]>0);
-  dc('tipo');charts['tipo']=new Chart(document.getElementById('ch-tipo'),{type:'doughnut',data:{labels:labsTipo,datasets:[{data:labsTipo.map(k=>tiposVal[k]),backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
-  dc('tipo-qtd');charts['tipo-qtd']=new Chart(document.getElementById('ch-tipo-qtd'),{type:'doughnut',data:{labels:Object.keys(tiposQtd).filter(k=>tiposQtd[k]>0),datasets:[{data:Object.keys(tiposQtd).filter(k=>tiposQtd[k]>0).map(k=>tiposQtd[k]),backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnutQtd()});
+  dc('tipo');charts['tipo']=new Chart(document.getElementById('ch-tipo'),{type:'doughnut',data:{labels:labsTipo,datasets:[{data:labsTipo.map(k=>tiposVal[k]),backgroundColor:CORES_DONUT_TIPO,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
+  dc('tipo-qtd');charts['tipo-qtd']=new Chart(document.getElementById('ch-tipo-qtd'),{type:'doughnut',data:{labels:Object.keys(tiposQtd).filter(k=>tiposQtd[k]>0),datasets:[{data:Object.keys(tiposQtd).filter(k=>tiposQtd[k]>0).map(k=>tiposQtd[k]),backgroundColor:CORES_DONUT_TIPO,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnutQtd()});
 
   // Por atração — donut valor + donut qtd
   const atrVal={Museu:0,GEX:0,MAR:0};
@@ -719,8 +722,8 @@ function renderCharts(at,de,ate,tipo){
     if(TEM_GEX.includes(r['Produto']))  atrQtd.GEX+=Number(r['Quantidade'])||0;
     if(TEM_MAR.includes(r['Produto']))  atrQtd.MAR+=Number(r['Quantidade'])||0;
   });
-  dc('atr');charts['atr']=new Chart(document.getElementById('ch-atr'),{type:'doughnut',data:{labels:['Museu','GEX','MAR'],datasets:[{data:[atrVal.Museu,atrVal.GEX,atrVal.MAR],backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
-  dc('atr-qtd');charts['atr-qtd']=new Chart(document.getElementById('ch-atr-qtd'),{type:'doughnut',data:{labels:['Museu','GEX','MAR'],datasets:[{data:[atrQtd.Museu,atrQtd.GEX,atrQtd.MAR],backgroundColor:CORES,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnutQtd()});
+  dc('atr');charts['atr']=new Chart(document.getElementById('ch-atr'),{type:'doughnut',data:{labels:['Museu','GEX','MAR'],datasets:[{data:[atrVal.Museu,atrVal.GEX,atrVal.MAR],backgroundColor:CORES_DONUT_ATR,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnut()});
+  dc('atr-qtd');charts['atr-qtd']=new Chart(document.getElementById('ch-atr-qtd'),{type:'doughnut',data:{labels:['Museu','GEX','MAR'],datasets:[{data:[atrQtd.Museu,atrQtd.GEX,atrQtd.MAR],backgroundColor:CORES_DONUT_ATR,borderWidth:2,borderColor:'#fff'}]},options:optsDoughnutQtd()});
 
   // Vendas A0 vs A1 por dia
   const dmA0={};const dqA0={};
